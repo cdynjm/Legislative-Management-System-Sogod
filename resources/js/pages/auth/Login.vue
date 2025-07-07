@@ -134,7 +134,7 @@ const submit = () => {
                             </small>
                             <hr class="my-1 hidden lg:block">
                             <small class="font-semibold text-black dark:text-white">JEMUEL CADAYONA</small>
-                            <small class="text-gray-600 dark:text-gray-400">Software Engineer</small>
+                            <small class="text-gray-600 dark:text-gray-400">Software Developer</small>
                             <small class="text-blue-400 dark:text-green-400 underline">
                                 <a href="https://jemcdyn.vercel.app/" target="_blank" class="flex items-center gap-1">
                                     <Globe2Icon class="w-5 h-auto" /> https://jemcdyn.vercel.app/
