@@ -181,7 +181,7 @@ const goToPreviousPage = () => {
                                 List of Ordinances
                             </div>
                             <div class="md:flex hidden">
-                                Municpality of Sogod
+                                Municipality of Sogod
                             </div>
                         </CardDescription>
                     </div>
