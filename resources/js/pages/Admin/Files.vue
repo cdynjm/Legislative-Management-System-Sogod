@@ -136,7 +136,7 @@ const fetchFiles = async () => {
     }
   `;
 
-    const response = await axios.post('/graphql', {
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, {
         query,
         variables: {
             id: props.id,

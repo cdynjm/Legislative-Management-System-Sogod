@@ -58,7 +58,7 @@ const fetchCategories = async () => {
       }
     }
   `
-    const response = await axios.post('/graphql', { query })
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query })
     return response.data.data
 }
 

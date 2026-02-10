@@ -76,7 +76,7 @@ const guestFetchFiles = async () => {
     }
   `;
 
-    const response = await axios.post('/graphql', {
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, {
         query,
         variables: {
             page: currentPage.value,
