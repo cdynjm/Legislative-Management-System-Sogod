@@ -1,19 +1,49 @@
-on: 
+name: 🚀 Deploy website on push
+
+on:
   push:
     branches:
       - main
-name: 🚀 Deploy website on push
+
 jobs:
   deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.SERVER }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      # 🐘 Setup PHP
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, pdo, pdo_mysql
+          tools: composer
+
+      # 📦 Install Composer dependencies
+      - name: 📦 Composer Install
+        run: composer install --no-dev --optimize-autoloader
+
+      # 🟢 Setup Node
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 📦 Install NPM dependencies
+      - name: 📦 NPM Install
+        run: npm install
+
+      # 🏗️ Build assets
+      - name: 🏗️ NPM Build
+        run: npm run build
+
+      # 📂 Deploy via FTP
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.SERVER }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
