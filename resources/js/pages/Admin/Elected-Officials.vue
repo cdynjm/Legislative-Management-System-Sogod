@@ -459,7 +459,7 @@ const handleUpdatePictureChange = async (event: Event) => {
                         </TableCell>
                     </TableRow>
                     <TableRow v-else-if="data?.officials.length === 0">
-                        <TableCell colspan="5">
+                        <TableCell colspan="10">
                             <small class="text-center text-red-500 flex items-center justify-center">
                                 <MinusCircle class="mr-2 w-5" />
                                 No Data Found

@@ -137,7 +137,7 @@ const goToPreviousPage = () => {
             <nav class="flex items-center justify-between gap-4 w-full">
                 <!-- Logo + Labels -->
                 <div class="flex items-center gap-3">
-                    <img draggable="false" src="/app-logo.jpg" alt="Logo" class="h-10 w-auto" />
+                    <img draggable="false" src="/app-logo.gif" alt="Logo" class="h-10 w-auto" />
 
                     <!-- Labels -->
                     <div class="flex flex-col leading-tight">
@@ -161,7 +161,7 @@ const goToPreviousPage = () => {
                 <div class="flex items-center gap-4">
                     <Link :href="route('login')"
                         class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]">
-                    Log in
+                        Log in
                     </Link>
                     <Button class="inline-block rounded-sm">
                         LMS
@@ -181,13 +181,14 @@ const goToPreviousPage = () => {
                                 List of Ordinances
                             </div>
                             <div class="md:flex hidden">
-                                Municpality of Bontoc
+                                Municpality of Sogod
                             </div>
                         </CardDescription>
                     </div>
                 </Card>
                 <div class="flex items-center gap-2 w-full sm:w-auto my-4">
-                    <Input v-model="searchQuery" placeholder="Search..." class="w-full bg-white shadow-none sm:w-full text-sm" />
+                    <Input v-model="searchQuery" placeholder="Search..."
+                        class="w-full bg-white shadow-none sm:w-full text-sm" />
                     <Button @click="searchQuerybtn" :disabled="isSearching" class="text-sm flex items-center gap-1">
                         <LoaderCircle v-if="isSearching" class="h-4 w-4 animate-spin" />
                         <Search v-else />
