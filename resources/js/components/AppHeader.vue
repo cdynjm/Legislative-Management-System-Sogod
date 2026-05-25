@@ -20,6 +20,7 @@ import type { BreadcrumbItem, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
+import type { Config } from 'ziggy-js';
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -37,6 +38,9 @@ interface PageProps {
             created_at: string;
             updated_at: string;
         };
+    };
+    ziggy: Config & {
+        location: string;
     };
     [key: string]: unknown;
 }
