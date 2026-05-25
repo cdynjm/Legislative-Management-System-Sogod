@@ -1,0 +1,35 @@
+import{_ as S,a as $,c as C,b as q}from"./CardHeader.vue_vue_type_script_setup_true_lang-DaCnYbvj.js";import{_ as T,a as j}from"./SkeletonBox.vue_vue_type_script_setup_true_lang-pR25TlSS.js";import{_ as B}from"./CardTitle.vue_vue_type_script_setup_true_lang-fGbnQk2c.js";import{_ as L}from"./AppLayout.vue_vue_type_script_setup_true_lang-D1FwDNt8.js";import{d as U,o as r,c as x,b as a,u as t,m as E,w as l,e,h as k,f as c,t as o,n as R,i as z,F as w,j as N,k as O}from"./app-drdL9nba.js";import{_ as I}from"./message-circle-BrTwQKBS.js";import{a as K}from"./Skeleton.vue_vue_type_script_setup_true_lang-BXquQZOJ.js";import{C as M}from"./circle-user-round-BlwUgkpT.js";import{U as Q,F as G}from"./users-round-CIJy9WZv.js";import"./NavFooter.vue_vue_type_script_setup_true_lang-C1qVwiyC.js";import"./AppLogoIcon.vue_vue_type_script_setup_true_lang-rPG0ddsZ.js";const H={class:"space-y-6 p-4"},J={class:"flex flex-col gap-4 md:flex-row md:items-start md:justify-between"},W={class:"space-y-2"},X={class:"inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600"},Y={class:"flex flex-col gap-2 md:items-end"},Z={class:"bg-muted/20 space-y-3 rounded-lg border p-4"},ee={class:"flex items-center gap-2 text-sm font-medium"},te={class:"text-muted-foreground text-sm"},se={class:"text-foreground font-medium"},ie={class:"space-y-3 rounded-lg border p-4"},ae={class:"flex items-center gap-2 text-sm font-medium"},oe={class:"space-y-2"},le={key:0,class:"text-muted-foreground text-sm italic"},ne={class:"flex items-center gap-2"},de={class:"font-medium"},re={class:"text-muted-foreground text-xs"},ce={class:"space-y-2 rounded-lg border p-4"},ue={class:"flex items-center gap-2 text-sm font-medium"},me={class:"text-muted-foreground text-sm leading-relaxed"},fe={class:"space-y-3 rounded-lg border p-4"},pe={class:"grid grid-cols-1 gap-2 text-sm md:grid-cols-2"},_e={class:"text-muted-foreground"},ge={class:"font-medium"},xe={class:"flex flex-wrap gap-3 text-sm"},ve={class:"bg-muted rounded-md px-3 py-1"},he={class:"font-medium"},be={class:"bg-muted rounded-md px-3 py-1"},we={class:"font-medium"},ye=["href"];function Fe(h){return`${new Date(h).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"})}`}const Te=U({__name:"View-File",props:{id:{}},setup(h){const b=h,y=[{title:"View File",href:"/admin/view-file/"+b.id}],P=async()=>(await O.post("/public/graphql",{query:`
+    query ($id: String!) {
+        viewFile(id: $id) {
+            file {
+                municipalStatus
+                provincialStatus
+                title
+                firstReadingDate
+                secondReadingDate
+                thirdReadingDate
+                ordinanceNumber
+                finalTitle
+                enactmentDate
+                lceapprovalDate
+                transmittalDate
+                spslapprovalDate
+                postStatus
+                publishStatus
+                file
+                author {
+                    name
+                }
+                coAuthors {
+                    official {
+                        name
+                        position
+                    }
+                }
+                category {
+                    category
+                }
+            }
+        }
+    }
+  `,variables:{id:b.id}})).data.data,{data:s,isFetching:A}=K({queryKey:["fetchViewedFile"],queryFn:P});return(V,i)=>(r(),x(w,null,[a(t(E),{title:"View File"}),a(L,{breadcrumbs:y},{default:l(()=>[e("div",H,[t(A)?(r(),k(t(S),{key:0,class:"w-full shadow-none outline-none"},{default:l(()=>[a(t($),null,{default:l(()=>[a(T)]),_:1})]),_:1})):(r(),k(t(S),{key:1,class:"bg-background w-full border shadow-none"},{default:l(()=>[a(t($),{class:"bg-muted/20 space-y-4 border-b"},{default:l(()=>{var n,u,m,f,p,_;return[e("div",J,[e("div",W,[a(t(B),{class:"text-xl font-bold tracking-tight"},{default:l(()=>{var d;return[c(" Ordinance #"+o(((d=t(s))==null?void 0:d.viewFile.file.ordinanceNumber)??""),1)]}),_:1}),a(t(C),{class:"text-sm leading-relaxed"},{default:l(()=>{var d;return[c(o((d=t(s))==null?void 0:d.viewFile.file.title),1)]}),_:1}),e("div",X,o((n=t(s))==null?void 0:n.viewFile.file.category.category),1)]),e("div",Y,[e("div",{class:R(["rounded-full px-3 py-1 text-xs font-medium",((u=t(s))==null?void 0:u.viewFile.file.municipalStatus)==1?"bg-red-100 text-red-600":"bg-green-100 text-green-700"])}," Municipal: "+o(((m=t(s))==null?void 0:m.viewFile.file.municipalStatus)==1?"Draft":"Approved"),3),e("div",{class:R(["rounded-full px-3 py-1 text-xs font-medium",((f=t(s))==null?void 0:f.viewFile.file.provincialStatus)==2?"bg-green-100 text-green-700":"bg-red-100 text-red-600"])}," Provincial: "+o(((p=t(s))==null?void 0:p.viewFile.file.provincialStatus)==2?"Approved":((_=t(s))==null?void 0:_.viewFile.file.provincialStatus)==1?"Disapproved":"No Status"),3)])])]}),_:1}),a(t(q),{class:"space-y-6 p-6"},{default:l(()=>{var n,u,m,f,p,_,d;return[e("div",Z,[e("div",ee,[a(t(M),{class:"h-5 w-5 text-blue-500"}),i[0]||(i[0]=c(" Author Information "))]),e("div",te,[e("span",se,o((n=t(s))==null?void 0:n.viewFile.file.author.name),1)])]),e("div",ie,[e("div",ae,[a(t(Q),{class:"h-5 w-5 text-blue-500"}),i[1]||(i[1]=c(" Co-Authors "))]),e("div",oe,[(m=(u=t(s))==null?void 0:u.viewFile.file.coAuthors)!=null&&m.length?z("",!0):(r(),x("div",le,"No co-authors")),(r(!0),x(w,null,N((f=t(s))==null?void 0:f.viewFile.file.coAuthors,(g,v)=>(r(),x("div",{key:v,class:"bg-muted/30 flex items-center justify-between rounded-md px-3 py-2 text-sm"},[e("div",ne,[i[2]||(i[2]=e("div",{class:"h-2 w-2 rounded-full bg-sky-500"},null,-1)),e("span",de,o(g.official.name),1)]),e("span",re,o(g.official.position),1)]))),128))])]),e("div",ce,[e("div",ue,[a(t(G),{class:"h-4 w-4 text-green-500"}),i[3]||(i[3]=c(" Final Title "))]),e("p",me,o(((p=t(s))==null?void 0:p.viewFile.file.finalTitle)??"-"),1)]),e("div",fe,[i[4]||(i[4]=e("div",{class:"text-sm font-medium"},"Timeline",-1)),e("div",pe,[(r(),x(w,null,N({"1st Reading":"firstReadingDate","2nd Reading":"secondReadingDate","3rd Reading":"thirdReadingDate",Enactment:"enactmentDate","LCE Approval":"lceapprovalDate",Transmittal:"transmittalDate","SPSL Approval":"spslapprovalDate"},(g,v)=>{var F,D;return e("div",{key:v,class:"bg-muted/20 flex justify-between rounded-md px-3 py-2"},[e("span",_e,o(v),1),e("span",ge,o((F=t(s))!=null&&F.viewFile.file[g]?Fe((D=t(s))==null?void 0:D.viewFile.file[g]):"-"),1)])}),64))])]),e("div",xe,[e("div",ve,[i[5]||(i[5]=c(" Post: ")),e("span",he,o(((_=t(s))==null?void 0:_.viewFile.file.postStatus)==1?"Posted":"Not Posted"),1)]),e("div",be,[i[6]||(i[6]=c(" Publish: ")),e("span",we,o(((d=t(s))==null?void 0:d.viewFile.file.publishStatus)==1?"Published":"Not Published"),1)])])]}),_:1}),a(t(j),{class:"bg-muted/10 flex justify-end border-t p-4"},{default:l(()=>[a(t(I),{size:"sm",class:"text-xs"},{default:l(()=>{var n;return[e("a",{href:`/storage/files/${(n=t(s))==null?void 0:n.viewFile.file.file}`,target:"_blank"}," Open File ",8,ye)]}),_:1})]),_:1})]),_:1}))])]),_:1})],64))}});export{Te as default};
