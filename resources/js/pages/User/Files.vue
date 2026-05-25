@@ -10,11 +10,12 @@ import Pagination from '@/components/Pagination.vue';
 import Skeleton from '@/components/Skeleton.vue';
 import SkeletonCard from '@/components/SkeletonCard.vue';
 import SlowLink from '@/components/SlowLink.vue';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
-import { EyeIcon, Folder, LoaderCircle, MinusCircle, Search } from 'lucide-vue-next';
+import { Calendar1Icon, EyeIcon, Folder, LoaderCircle, MinusCircle, Search } from 'lucide-vue-next';
 
 const props = defineProps<{
     id: string;
@@ -235,9 +236,7 @@ const goToPreviousPage = () => {
                                 </TableCell>
 
                                 <TableCell>
-                                    <span class="bg-muted inline-flex rounded-full px-3 py-1 text-sm">
-                                        {{ category.totalFiles }} files
-                                    </span>
+                                    <span class="bg-muted inline-flex rounded-full px-3 py-1 text-sm"> {{ category.totalFiles }} files </span>
                                 </TableCell>
 
                                 <TableCell class="text-muted-foreground text-[12px]">
@@ -367,59 +366,85 @@ const goToPreviousPage = () => {
                                                 </Badge>
                                             </div>
 
-                                            <Table class="text-[12px]">
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">Implementation</TableCell>
-                                                        <TableCell>{{
-                                                            files.implementationDate ? formatDate(files.implementationDate) : '-'
-                                                        }}</TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">SPSL Approval</TableCell>
-                                                        <TableCell>{{ files.spslapprovalDate ? formatDate(files.spslapprovalDate) : '-' }}</TableCell>
-                                                    </TableRow>
+                                            <Accordion type="single" collapsible>
+                                                <AccordionItem value="dates" class="rounded-md border">
+                                                    <Button variant="ghost" size="sm" class="w-full justify-start" as-child>
+                                                        <AccordionTrigger class="flex items-center gap-2 text-[12px]">
+                                                            <Calendar1Icon class="text-muted-foreground" />
+                                                            <span class="text-muted-foreground">View Timeline Dates</span>
+                                                        </AccordionTrigger>
+                                                    </Button>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">Transmittal</TableCell>
-                                                        <TableCell>{{ files.transmittalDate ? formatDate(files.transmittalDate) : '-' }}</TableCell>
-                                                    </TableRow>
+                                                    <AccordionContent>
+                                                        <Table class="text-[12px]">
+                                                            <TableBody>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">Implementation</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.implementationDate ? formatDate(files.implementationDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">LCE Approval</TableCell>
-                                                        <TableCell>{{ files.lceapprovalDate ? formatDate(files.lceapprovalDate) : '-' }}</TableCell>
-                                                    </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">SPSL Approval</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.spslapprovalDate ? formatDate(files.spslapprovalDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">Enactment</TableCell>
-                                                        <TableCell>{{ files.enactmentDate ? formatDate(files.enactmentDate) : '-' }}</TableCell>
-                                                    </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">Transmittal</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.transmittalDate ? formatDate(files.transmittalDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">3rd Reading</TableCell>
-                                                        <TableCell>{{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : '-' }}</TableCell>
-                                                    </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">LCE Approval</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.lceapprovalDate ? formatDate(files.lceapprovalDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">2nd Reading</TableCell>
-                                                        <TableCell>{{
-                                                            files.secondReadingDate ? formatDate(files.secondReadingDate) : '-'
-                                                        }}</TableCell>
-                                                    </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">Enactment</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.enactmentDate ? formatDate(files.enactmentDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">Public Hearing</TableCell>
-                                                        <TableCell>{{
-                                                            files.publicHearingDate ? formatDate(files.publicHearingDate) : '-'
-                                                        }}</TableCell>
-                                                    </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">3rd Reading</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
 
-                                                    <TableRow>
-                                                        <TableCell class="font-medium">1st Reading</TableCell>
-                                                        <TableCell>{{ files.firstReadingDate ? formatDate(files.firstReadingDate) : '-' }}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">2nd Reading</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.secondReadingDate ? formatDate(files.secondReadingDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
+
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">Public Hearing</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.publicHearingDate ? formatDate(files.publicHearingDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
+
+                                                                <TableRow>
+                                                                    <TableCell class="font-medium">1st Reading</TableCell>
+                                                                    <TableCell>
+                                                                        {{ files.firstReadingDate ? formatDate(files.firstReadingDate) : '-' }}
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            </TableBody>
+                                                        </Table>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
                                         </div>
                                     </TableCell>
 

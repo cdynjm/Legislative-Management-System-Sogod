@@ -24,6 +24,8 @@ final readonly class File
         $page = $args['page'];
         $perPage = $args['first'];
 
+        $search = $args['search'] ?? '';
+        
         $paginator = Files::with((new Files)->relation)
             ->where('categoryID', $aes->decrypt($args['id']))
             ->when($search, function ($query) use ($search) {
