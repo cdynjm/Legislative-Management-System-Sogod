@@ -30,6 +30,7 @@ class AdminManagementController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'designation' => $request->designation,
             'password' => bcrypt($request->password),
             'role' => 1,
         ]);
@@ -46,6 +47,7 @@ class AdminManagementController extends Controller
        $user = User::where('id', $this->aes->decrypt($request->id))->update([
             'name' => $request->name,
             'email' => $request->email,
+            'designation' => $request->designation,
         ]);
 
         if(!empty($request->password)) {

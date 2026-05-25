@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -30,9 +30,11 @@ const fetchViewedFile = async () => {
                 provincialStatus
                 title
                 firstReadingDate
+                publicHearingDate
                 secondReadingDate
                 thirdReadingDate
                 ordinanceNumber
+                finalOrdinanceNumber
                 finalTitle
                 enactmentDate
                 lceapprovalDate
@@ -40,6 +42,7 @@ const fetchViewedFile = async () => {
                 spslapprovalDate
                 postStatus
                 publishStatus
+                implementationDate
                 file
                 author {
                     name
@@ -89,17 +92,36 @@ const { data, isFetching } = useQuery({
                 <CardHeader class="bg-muted/20 space-y-4 border-b">
                     <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                         <!-- MAIN INFO -->
-                        <div class="space-y-2">
-                            <CardTitle class="text-xl font-bold tracking-tight">
-                                Ordinance #{{ data?.viewFile.file.ordinanceNumber ?? '' }}
-                            </CardTitle>
+                        <div class="space-y-4">
+                            <!-- Ordinance numbers -->
+                            <div class="flex flex-wrap gap-3">
+                                <div class="bg-muted/40 rounded-lg border px-4 py-2">
+                                    <div class="text-muted-foreground text-[11px] tracking-wide uppercase">Ordinance No.</div>
 
-                            <CardDescription class="text-sm leading-relaxed">
-                                {{ data?.viewFile.file.title }}
-                            </CardDescription>
+                                    <div class="text-sm font-semibold">
+                                        {{ data?.viewFile.file.ordinanceNumber ?? '-' }}
+                                    </div>
+                                </div>
 
+                                <div class="rounded-lg border border-blue-100 bg-blue-50 px-4 py-2">
+                                    <div class="text-[11px] tracking-wide text-blue-500 uppercase">Final Ordinance No.</div>
+
+                                    <div class="text-sm font-semibold text-blue-700">
+                                        {{ data?.viewFile.file.finalOrdinanceNumber ?? '-' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category -->
                             <div class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
                                 {{ data?.viewFile.file.category.category }}
+                            </div>
+
+                            <!-- Title -->
+                            <div>
+                                <p class="ms-2 text-[14px] leading-snug">
+                                    {{ data?.viewFile.file.title ?? 'Untitled File' }}
+                                </p>
                             </div>
                         </div>
 
@@ -190,6 +212,7 @@ const { data, isFetching } = useQuery({
                             <div
                                 v-for="(label, key) in {
                                     '1st Reading': 'firstReadingDate',
+                                    'Public Hearing': 'publicHearingDate',
                                     '2nd Reading': 'secondReadingDate',
                                     '3rd Reading': 'thirdReadingDate',
                                     Enactment: 'enactmentDate',
@@ -221,6 +244,12 @@ const { data, isFetching } = useQuery({
                             Publish:
                             <span class="font-medium">
                                 {{ data?.viewFile.file.publishStatus == 1 ? 'Published' : 'Not Published' }}
+                            </span>
+                        </div>
+                        <div class="bg-muted rounded-md px-3 py-1">
+                            Implementation:
+                            <span class="font-medium">
+                                {{ data?.viewFile.file.implementationDate ? formatDate(data?.viewFile.file.implementationDate) : '-' }}
                             </span>
                         </div>
                     </div>

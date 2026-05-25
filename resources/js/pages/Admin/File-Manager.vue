@@ -135,7 +135,7 @@ const deleteCategory = () => {
         <div class="space-y-6 p-4">
             <!-- Top Right Add Button -->
             <div class="flex w-full items-center justify-between">
-                <h6 class="text-md flex-1 font-bold">Categories</h6>
+                <h6 class="text-md flex-1 font-bold">Committees</h6>
 
                 <Dialog v-model:open="openDialog">
                     <DialogTrigger as-child>
@@ -143,15 +143,15 @@ const deleteCategory = () => {
                     </DialogTrigger>
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Add Category</DialogTitle>
-                            <DialogDescription> Create a new category for the files </DialogDescription>
+                            <DialogTitle>Add Committee</DialogTitle>
+                            <DialogDescription> Create a new committee for the files </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="createCategory">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                    <Label class="text-right">Category</Label>
-                                    <Input v-model="createForm.category" placeholder="Category Name" class="col-span-3" required />
+                                <div class="grid grid-cols-1 items-center gap-4">
+                                    <Label class="text-right">Committee</Label>
+                                    <Input v-model="createForm.category" placeholder="Committee Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -167,15 +167,15 @@ const deleteCategory = () => {
                 <Dialog v-model:open="editDialog">
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Edit Category</DialogTitle>
-                            <DialogDescription> Edit the details of the selected category </DialogDescription>
+                            <DialogTitle>Edit Committee</DialogTitle>
+                            <DialogDescription> Edit the details of the selected committee </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="updateCategory">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                    <Label class="text-right">Category</Label>
-                                    <Input v-model="updateForm.category" placeholder="Category Name" class="col-span-3" required />
+                                <div class="grid grid-cols-1 items-center gap-4">
+                                    <Label class="text-right">Committee</Label>
+                                    <Input v-model="updateForm.category" placeholder="Committee Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -191,8 +191,8 @@ const deleteCategory = () => {
                 <Dialog v-model:open="deleteDialog">
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Delete Category</DialogTitle>
-                            <DialogDescription> Are you sure you want to delete this category? This action cannot be undone. </DialogDescription>
+                            <DialogTitle>Delete Committee</DialogTitle>
+                            <DialogDescription> Are you sure you want to delete this committee? This action cannot be undone. </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="deleteCategory">
@@ -213,7 +213,7 @@ const deleteCategory = () => {
                         <TableRow class="text-[12px] [&>th]:py-4">
                             <TableHead class="text-muted-foreground]"> # </TableHead>
 
-                            <TableHead class="text-muted-foreground"> Category </TableHead>
+                            <TableHead class="text-muted-foreground"> Committee </TableHead>
 
                             <TableHead class="text-muted-foreground"> No. of Files </TableHead>
 
@@ -236,7 +236,7 @@ const deleteCategory = () => {
                             <TableCell colspan="5" class="py-14">
                                 <div class="text-muted-foreground flex flex-col items-center gap-2">
                                     <MinusCircle class="h-8 w-8 text-red-500" />
-                                    <small>No categories found</small>
+                                    <small>No Data Found</small>
                                 </div>
                             </TableCell>
                         </TableRow>

@@ -37,7 +37,7 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
+   public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
@@ -47,6 +47,19 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+        }
+
+        $user = Auth::user();
+
+        if (
+            $user?->official &&
+            $user->official->status == 2
+        ) {
+            Auth::logout();
+
+        throw ValidationException::withMessages([
+            'email' => 'Your SB account is no longer active because your term has ended or you are no longer an elected/re-elected SB member.',
+        ]);
         }
 
         RateLimiter::clear($this->throttleKey());

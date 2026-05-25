@@ -1,0 +1,1 @@
+import{a as o}from"./message-circle-BxEizKUk.js";import{d as n,o as t,c as r,n as l,u as c,z as m}from"./app-Cg3RKTB4.js";const f=n({__name:"CardTitle",props:{class:{}},setup(s){const a=s;return(e,p)=>(t(),r("h3",{"data-slot":"card-title",class:l(c(o)("leading-none font-semibold",a.class))},[m(e.$slots,"default")],2))}});export{f as _};

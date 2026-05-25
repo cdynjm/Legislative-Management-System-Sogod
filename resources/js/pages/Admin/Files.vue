@@ -64,9 +64,11 @@ const fetchFiles = async () => {
             provincialStatus
             title
             firstReadingDate
+            publicHearingDate
             secondReadingDate
             thirdReadingDate
             ordinanceNumber
+            finalOrdinanceNumber
             finalTitle
             enactmentDate
             lceapprovalDate
@@ -74,6 +76,7 @@ const fetchFiles = async () => {
             spslapprovalDate
             postStatus
             publishStatus
+            implementationDate
             file
             updated_at
             author {
@@ -222,9 +225,11 @@ function editFileDialog(
     author: string,
     coauthor: string[],
     firstReadingDate: string,
+    publicHearingDate: string,
     secondReadingDate: string,
     thirdReadingDate: string,
     ordinanceNumber: string,
+    finalOrdinanceNumber: string,
     finalTitle: string,
     enactmentDate: string,
     lceapprovalDate: string,
@@ -232,6 +237,7 @@ function editFileDialog(
     spslapprovalDate: string,
     postStatus: string,
     publishStatus: string,
+    implementationDate: string,
 ) {
     updateForm.id = id;
     updateForm.categoryID = categoryID;
@@ -241,9 +247,11 @@ function editFileDialog(
     updateForm.author = author;
     updateForm.coauthor = coauthor;
     updateForm.firstReadingDate = firstReadingDate;
+    updateForm.publicHearingDate = publicHearingDate;
     updateForm.secondReadingDate = secondReadingDate;
     updateForm.thirdReadingDate = thirdReadingDate;
     updateForm.ordinanceNumber = ordinanceNumber;
+    updateForm.finalOrdinanceNumber = finalOrdinanceNumber;
     updateForm.finalTitle = finalTitle;
     updateForm.enactmentDate = enactmentDate;
     updateForm.lceapprovalDate = lceapprovalDate;
@@ -251,6 +259,7 @@ function editFileDialog(
     updateForm.spslapprovalDate = spslapprovalDate;
     updateForm.postStatus = postStatus;
     updateForm.publishStatus = publishStatus;
+    updateForm.implementationDate = implementationDate;
     editDialog.value = true;
 }
 
@@ -263,9 +272,11 @@ const updateForm = useForm({
     author: '' as string,
     coauthor: [] as string[],
     firstReadingDate: '' as string,
+    publicHearingDate: '' as string,
     secondReadingDate: '' as string,
     thirdReadingDate: '' as string,
     ordinanceNumber: '' as string,
+    finalOrdinanceNumber: '' as string,
     finalTitle: '' as string,
     enactmentDate: '' as string,
     lceapprovalDate: '' as string,
@@ -273,6 +284,7 @@ const updateForm = useForm({
     spslapprovalDate: '' as string,
     postStatus: '' as string,
     publishStatus: '' as string,
+    implementationDate: '' as string,
     file: null as any,
 });
 
@@ -449,7 +461,7 @@ const deleteCategory = () => {
                             @click="createCategoryDialog(data?.files.categoryName.encrypted_id)"
                             class="cursor-pointer text-[12px]"
                         >
-                            + New Category
+                            + New Committee
                         </Button>
 
                         <Button variant="secondary" @click="createFileDialog(data?.files.categoryName.encrypted_id)" class="text-[12px]">
@@ -461,17 +473,17 @@ const deleteCategory = () => {
                 <Dialog v-model:open="openCategoryDialog">
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Add Category</DialogTitle>
+                            <DialogTitle>Add Committee</DialogTitle>
                             <DialogDescription>
-                                Create a sub-category for <b>{{ data?.files.categoryName.category }}</b>
+                                Create a sub-committee for <b>{{ data?.files.categoryName.category }}</b>
                             </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="createCategory">
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-1 items-center gap-4">
-                                    <Label class="text-right">Category</Label>
-                                    <Input v-model="createCategoryForm.category" placeholder="Category Name" class="col-span-3" required />
+                                    <Label class="text-right">Committee</Label>
+                                    <Input v-model="createCategoryForm.category" placeholder="Committee Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -487,15 +499,15 @@ const deleteCategory = () => {
                 <Dialog v-model:open="editCategoryDialog">
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Edit Category</DialogTitle>
-                            <DialogDescription> Edit the details of the selected category </DialogDescription>
+                            <DialogTitle>Edit Committee</DialogTitle>
+                            <DialogDescription> Edit the details of the selected committee </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="updateCategory">
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-1 items-center gap-4">
-                                    <Label class="text-right">Category</Label>
-                                    <Input v-model="updateCategoryForm.category" placeholder="Category Name" class="col-span-3" required />
+                                    <Label class="text-right">Committee</Label>
+                                    <Input v-model="updateCategoryForm.category" placeholder="Committee Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -511,8 +523,8 @@ const deleteCategory = () => {
                 <Dialog v-model:open="deleteCategoryDialog">
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
-                            <DialogTitle>Delete Subcategory</DialogTitle>
-                            <DialogDescription> Are you sure you want to delete this category? This action cannot be undone. </DialogDescription>
+                            <DialogTitle>Delete Subcommittee</DialogTitle>
+                            <DialogDescription> Are you sure you want to delete this committee? This action cannot be undone. </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="deleteCategory">
@@ -674,6 +686,11 @@ const deleteCategory = () => {
                             </div>
 
                             <div class="md:col-span-2">
+                                <Label class="text-sm font-medium text-gray-700">Final Ordinance Number</Label>
+                                <Input v-model="updateForm.finalOrdinanceNumber" type="text" class="w-full" />
+                            </div>
+
+                            <div class="md:col-span-2">
                                 <Label class="text-sm font-medium text-gray-700">Final Title</Label>
                                 <Textarea v-model="updateForm.finalTitle" class="w-full" />
                             </div>
@@ -721,6 +738,12 @@ const deleteCategory = () => {
                             <div>
                                 <Label class="text-sm font-medium text-gray-700">1st Reading Date</Label>
                                 <Input v-model="updateForm.firstReadingDate" type="date" />
+                            </div>
+                            <div>
+                                <Label class="text-sm font-medium text-gray-700"
+                                    >Public Hearing Date <small class="text-red-600">(Optional)</small></Label
+                                >
+                                <Input v-model="updateForm.publicHearingDate" type="date" />
                             </div>
                             <div>
                                 <Label class="text-sm font-medium text-gray-700">2nd Reading Date</Label>
@@ -778,6 +801,11 @@ const deleteCategory = () => {
                                 </Select>
                             </div>
 
+                            <div>
+                                <Label class="text-sm font-medium text-gray-700">Implementation Date</Label>
+                                <Input v-model="updateForm.implementationDate" type="date" />
+                            </div>
+
                             <div class="md:col-span-2">
                                 <Label class="text-sm font-medium text-gray-700">Update File</Label>
                                 <Input type="file" @change="handleEditFileChange" accept=".pdf" />
@@ -827,7 +855,7 @@ const deleteCategory = () => {
                         <TableHeader class="bg-muted/40">
                             <TableRow class="[&>th]:py-4">
                                 <TableHead class="text-muted-foreground"><small>#</small></TableHead>
-                                <TableHead class="text-muted-foreground"><small>Category</small></TableHead>
+                                <TableHead class="text-muted-foreground"><small>Committee</small></TableHead>
                                 <TableHead class="text-muted-foreground"><small>No. of Files</small></TableHead>
                                 <TableHead class="text-muted-foreground"><small>Created</small></TableHead>
                                 <TableHead class="text-muted-foreground text-center"><small>Actions</small></TableHead>
@@ -844,7 +872,7 @@ const deleteCategory = () => {
                             <TableRow v-else-if="data?.files.subCategoriesList.length === 0">
                                 <TableCell colspan="5" class="text-muted-foreground py-14 text-center">
                                     <MinusCircle class="mx-auto mb-2 h-6 w-6 text-red-500" />
-                                    No categories found
+                                    No Data Found
                                 </TableCell>
                             </TableRow>
 
@@ -876,7 +904,7 @@ const deleteCategory = () => {
 
                                 <TableCell>
                                     <span class="bg-muted inline-flex rounded-full px-3 py-1 text-sm">
-                                        {{ category.totalFiles }}
+                                        {{ category.totalFiles }} files
                                     </span>
                                 </TableCell>
 
@@ -964,7 +992,7 @@ const deleteCategory = () => {
                                             </div>
 
                                             <Badge variant="secondary" class="w-fit text-[12px]">
-                                                <span class="font-bold">{{ files.ordinanceNumber ?? '-' }}</span>
+                                                <span class="font-bold">{{ files.finalOrdinanceNumber ?? files.ordinanceNumber }}</span>
                                             </Badge>
 
                                             <p class="mt-2 line-clamp-3 text-[13px] leading-relaxed text-wrap text-slate-700">
@@ -1007,7 +1035,7 @@ const deleteCategory = () => {
                                                             : 'rounded-md bg-green-100 p-1 text-[12px] text-green-600'
                                                     "
                                                 >
-                                                    {{ files.municipalStatus == 1 ? 'Draft' : 'Approved' }}
+                                                    {{ files.municipalStatus == 1 ? 'Draft | Municipal' : 'Approved | Municipal' }}
                                                 </Badge>
 
                                                 <Badge
@@ -1021,30 +1049,67 @@ const deleteCategory = () => {
                                                 >
                                                     {{
                                                         files.provincialStatus == 1
-                                                            ? 'Disapproved'
+                                                            ? 'Disapproved | Provincial'
                                                             : files.provincialStatus == 2
-                                                              ? 'Approved'
-                                                              : 'Pending'
+                                                              ? 'Approved | Provincial'
+                                                              : 'Pending | Provincial'
                                                     }}
                                                 </Badge>
                                             </div>
 
-                                            <div class="text-muted-foreground text-[12px]">
-                                                <div>
-                                                    3rd Reading:
-                                                    {{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : 'No date' }}
-                                                </div>
+                                            <Table class="text-[12px]">
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Implementation</TableCell>
+                                                        <TableCell>{{
+                                                            files.implementationDate ? formatDate(files.implementationDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">SPSL Approval</TableCell>
+                                                        <TableCell>{{ files.spslapprovalDate ? formatDate(files.spslapprovalDate) : '-' }}</TableCell>
+                                                    </TableRow>
 
-                                                <div>
-                                                    2nd Reading:
-                                                    {{ files.secondReadingDate ? formatDate(files.secondReadingDate) : 'No date' }}
-                                                </div>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Transmittal</TableCell>
+                                                        <TableCell>{{ files.transmittalDate ? formatDate(files.transmittalDate) : '-' }}</TableCell>
+                                                    </TableRow>
 
-                                                <div>
-                                                    1st Reading:
-                                                    {{ files.firstReadingDate ? formatDate(files.firstReadingDate) : 'No date' }}
-                                                </div>
-                                            </div>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">LCE Approval</TableCell>
+                                                        <TableCell>{{ files.lceapprovalDate ? formatDate(files.lceapprovalDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Enactment</TableCell>
+                                                        <TableCell>{{ files.enactmentDate ? formatDate(files.enactmentDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">3rd Reading</TableCell>
+                                                        <TableCell>{{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">2nd Reading</TableCell>
+                                                        <TableCell>{{
+                                                            files.secondReadingDate ? formatDate(files.secondReadingDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Public Hearing</TableCell>
+                                                        <TableCell>{{
+                                                            files.publicHearingDate ? formatDate(files.publicHearingDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">1st Reading</TableCell>
+                                                        <TableCell>{{ files.firstReadingDate ? formatDate(files.firstReadingDate) : '-' }}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
                                         </div>
                                     </TableCell>
 
@@ -1077,9 +1142,11 @@ const deleteCategory = () => {
                                                         files.author.encrypted_id,
                                                         getCoAuthorIds(files.coAuthors),
                                                         files.firstReadingDate,
+                                                        files.publicHearingDate,
                                                         files.secondReadingDate,
                                                         files.thirdReadingDate,
                                                         files.ordinanceNumber,
+                                                        files.finalOrdinanceNumber,
                                                         files.finalTitle,
                                                         files.enactmentDate,
                                                         files.lceapprovalDate,
@@ -1087,6 +1154,7 @@ const deleteCategory = () => {
                                                         files.spslapprovalDate,
                                                         files.postStatus,
                                                         files.publishStatus,
+                                                        files.implementationDate,
                                                     )
                                                 "
                                             >

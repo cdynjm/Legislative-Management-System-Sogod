@@ -19,12 +19,14 @@ class Files extends Model
         'categoryID',
         'municipalStatus',
         'provincialStatus',
-        'title',
         'authorID',
         'firstReadingDate',
+        'publicHearingDate',
         'secondReadingDate',
         'thirdReadingDate',
         'ordinanceNumber',
+        'finalOrdinanceNumber',
+        'title',
         'finalTitle',
         'enactmentDate',
         'lceapprovalDate',
@@ -32,6 +34,7 @@ class Files extends Model
         'spslapprovalDate',
         'postStatus',
         'publishStatus',
+        'implementationDate',
         'file'
     ];
 

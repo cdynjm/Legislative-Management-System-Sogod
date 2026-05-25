@@ -26,7 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'designation',
     ];
 
     /**
@@ -50,6 +51,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function official()
+    {
+        return $this->belongsTo(Officials::class, 'officialID', 'id')
+            ->withTrashed();
     }
 
     public function getEncryptedIdAttribute(): string

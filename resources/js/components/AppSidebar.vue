@@ -4,7 +4,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem, type SharedData } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import { Folder, LayoutGrid, User2, UserCheck } from 'lucide-vue-next';
+import { ActivityIcon, Folder, LayoutGrid, User2, UserCheck } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import SlowLink from './SlowLink.vue';
 
@@ -16,6 +16,7 @@ const mainNavItems: NavItem[] = page.props.auth.user.role === 1
       { title: 'Admin Management', href: 'admin.management', icon: User2 },
       { title: 'Elected Officials', href: 'admin.elected-officials', icon: UserCheck },
       { title: 'File Manager', href: 'admin.file-manager', icon: Folder },
+      { title: 'Reports', href: 'admin.reports', icon: ActivityIcon },
     ]
   : [
       { title: 'Dashboard', href: 'user.dashboard', icon: LayoutGrid },

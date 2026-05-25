@@ -5,6 +5,7 @@ type User {
   name: String!
   email: String!
   role: String!
+  designation: String
   created_at: String!
   updated_at: String!
 }
@@ -38,12 +39,14 @@ type Files {
   categoryID: String
   municipalStatus: String
   provincialStatus: String
-  title: String
   authorID: String
   firstReadingDate: String
+  publicHearingDate: String
   secondReadingDate: String
   thirdReadingDate: String
   ordinanceNumber: String
+  finalOrdinanceNumber: String
+  title: String
   finalTitle: String
   enactmentDate: String
   lceapprovalDate: String
@@ -51,6 +54,7 @@ type Files {
   spslapprovalDate: String
   postStatus: String
   publishStatus: String
+  implementationDate: String
   file: String
   created_at: String
   updated_at: String

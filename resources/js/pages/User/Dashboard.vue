@@ -30,11 +30,18 @@ const fetchDashboard = async () => {
                     provincialStatus
                     title
                     ordinanceNumber
+                    finalOrdinanceNumber
                     finalTitle
                     file
                     firstReadingDate
+                    publicHearingDate
                     secondReadingDate
                     thirdReadingDate
+                    enactmentDate
+                    lceapprovalDate
+                    transmittalDate
+                    spslapprovalDate
+                    implementationDate
                     updated_at
                     author {
                         name
@@ -73,7 +80,7 @@ const { isPending, data } = useQuery({
             <SlowLink :href="route('user.file-manager')" prefetch>
                 <Card class="pt-0 shadow-none">
                     <CardHeader class="flex items-center justify-between bg-blue-50 py-2">
-                        <CardTitle class="text-[13px]">Categories</CardTitle>
+                        <CardTitle class="text-[13px]">Committees</CardTitle>
                         <Folder class="text-muted-foreground h-5 w-5" />
                     </CardHeader>
                     <CardContent v-if="isPending">
@@ -138,7 +145,7 @@ const { isPending, data } = useQuery({
 
                         <TableHead class=""> Ordinance </TableHead>
 
-                        <TableHead> Category </TableHead>
+                        <TableHead> Committee </TableHead>
 
                         <TableHead> Co-Authors </TableHead>
 
@@ -190,7 +197,7 @@ const { isPending, data } = useQuery({
                                     </div>
 
                                     <Badge variant="secondary" class="w-fit text-[12px]">
-                                        <span class="font-bold">{{ files.ordinanceNumber ?? '-' }}</span>
+                                        <span class="font-bold">{{ files.finalOrdinanceNumber ?? files.ordinanceNumber }}</span>
                                     </Badge>
 
                                     <p class="mt-2 line-clamp-3 text-[13px] leading-relaxed text-wrap text-slate-700">
@@ -240,7 +247,7 @@ const { isPending, data } = useQuery({
                                                     : 'rounded-md bg-green-100 p-1 text-[12px] text-green-600'
                                             "
                                         >
-                                            {{ files.municipalStatus == 1 ? 'Draft' : 'Approved' }}
+                                            {{ files.municipalStatus == 1 ? 'Draft | Municipal' : 'Approved | Municipal' }}
                                         </Badge>
 
                                         <Badge
@@ -252,28 +259,63 @@ const { isPending, data } = useQuery({
                                                       : 'rounded-md bg-gray-100 p-1 text-[12px] text-gray-600'
                                             "
                                         >
-                                            {{ files.provincialStatus == 1 ? 'Disapproved' : files.provincialStatus == 2 ? 'Approved' : 'Pending' }}
+                                            {{
+                                                files.provincialStatus == 1
+                                                    ? 'Disapproved | Provincial'
+                                                    : files.provincialStatus == 2
+                                                      ? 'Approved | Provincial'
+                                                      : 'Pending | Provincial'
+                                            }}
                                         </Badge>
                                     </div>
 
-                                    <div class="text-muted-foreground text-[11px]">
-                                        <template v-if="files.thirdReadingDate">
-                                            3rd Reading:
-                                            {{ formatDate(files.thirdReadingDate) }}
-                                        </template>
+                                    <Table class="text-[12px]">
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell class="font-medium">Implementation</TableCell>
+                                                <TableCell>{{ files.implementationDate ? formatDate(files.implementationDate) : '-' }}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell class="font-medium">SPSL Approval</TableCell>
+                                                <TableCell>{{ files.spslapprovalDate ? formatDate(files.spslapprovalDate) : '-' }}</TableCell>
+                                            </TableRow>
 
-                                        <template v-else-if="files.secondReadingDate">
-                                            2nd Reading:
-                                            {{ formatDate(files.secondReadingDate) }}
-                                        </template>
+                                            <TableRow>
+                                                <TableCell class="font-medium">Transmittal</TableCell>
+                                                <TableCell>{{ files.transmittalDate ? formatDate(files.transmittalDate) : '-' }}</TableCell>
+                                            </TableRow>
 
-                                        <template v-else-if="files.firstReadingDate">
-                                            1st Reading:
-                                            {{ formatDate(files.firstReadingDate) }}
-                                        </template>
+                                            <TableRow>
+                                                <TableCell class="font-medium">LCE Approval</TableCell>
+                                                <TableCell>{{ files.lceapprovalDate ? formatDate(files.lceapprovalDate) : '-' }}</TableCell>
+                                            </TableRow>
 
-                                        <template v-else> No reading yet </template>
-                                    </div>
+                                            <TableRow>
+                                                <TableCell class="font-medium">Enactment</TableCell>
+                                                <TableCell>{{ files.enactmentDate ? formatDate(files.enactmentDate) : '-' }}</TableCell>
+                                            </TableRow>
+
+                                            <TableRow>
+                                                <TableCell class="font-medium">3rd Reading</TableCell>
+                                                <TableCell>{{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : '-' }}</TableCell>
+                                            </TableRow>
+
+                                            <TableRow>
+                                                <TableCell class="font-medium">2nd Reading</TableCell>
+                                                <TableCell>{{ files.secondReadingDate ? formatDate(files.secondReadingDate) : '-' }}</TableCell>
+                                            </TableRow>
+
+                                            <TableRow>
+                                                <TableCell class="font-medium">Public Hearing</TableCell>
+                                                <TableCell>{{ files.publicHearingDate ? formatDate(files.publicHearingDate) : '-' }}</TableCell>
+                                            </TableRow>
+
+                                            <TableRow>
+                                                <TableCell class="font-medium">1st Reading</TableCell>
+                                                <TableCell>{{ files.firstReadingDate ? formatDate(files.firstReadingDate) : '-' }}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
                                 </div>
                             </TableCell>
 

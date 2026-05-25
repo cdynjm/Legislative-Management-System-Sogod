@@ -31,6 +31,7 @@ const fetchAdmins = async () => {
         name
         email
         role
+        designation
       }
     }
   `;
@@ -53,6 +54,7 @@ const createForm = useForm({
     name: '',
     email: '',
     password: '',
+    designation: '',
 });
 
 const createAdmin = () => {
@@ -72,10 +74,11 @@ const createAdmin = () => {
 
 const editDialog = ref(false);
 
-function editAdminDialog(id: string, name: string, email: string) {
+function editAdminDialog(id: string, name: string, email: string, designation: string) {
     updateForm.id = id;
     updateForm.name = name;
     updateForm.email = email;
+    updateForm.designation = designation;
     editDialog.value = true;
 }
 
@@ -84,6 +87,7 @@ const updateForm = useForm({
     name: '',
     email: '',
     password: '',
+    designation: '',
 });
 
 const updateAdmin = () => {
@@ -154,6 +158,10 @@ const deleteAdmin = () => {
                                     <Input v-model="createForm.name" placeholder="John Doe" class="col-span-3" required />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
+                                    <Label class="text-right">Designation</Label>
+                                    <Input v-model="createForm.designation" placeholder="Designation" class="col-span-3" required />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">Email</Label>
                                     <Input v-model="createForm.email" type="email" placeholder="john@example.com" class="col-span-3" required />
                                 </div>
@@ -184,6 +192,10 @@ const deleteAdmin = () => {
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">Name</Label>
                                     <Input v-model="updateForm.name" placeholder="John Doe" class="col-span-3" required />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                    <Label class="text-right">Designation</Label>
+                                    <Input v-model="updateForm.designation" placeholder="Designation" class="col-span-3" required />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">Email</Label>
@@ -226,12 +238,14 @@ const deleteAdmin = () => {
             <div class="bg-background overflow-hidden rounded-md border">
                 <Table>
                     <TableHeader class="sticky top-0 z-10 bg-slate-50">
-                        <TableRow class="[&>th]:py-4 text-[12px]">
+                        <TableRow class="text-[12px] [&>th]:py-4">
                             <TableHead class=""> # </TableHead>
 
                             <TableHead> User </TableHead>
 
                             <TableHead> Email Address </TableHead>
+
+                            <TableHead> Designation </TableHead>
 
                             <TableHead> Role </TableHead>
 
@@ -291,9 +305,16 @@ const deleteAdmin = () => {
                                 </span>
                             </TableCell>
 
+                            <!-- Designation -->
+                            <TableCell>
+                                <span class="text-sm text-slate-600">
+                                    {{ admin.designation }}
+                                </span>
+                            </TableCell>
+
                             <!-- Role -->
                             <TableCell>
-                                <Badge class="bg-sky-100 text-sky-700 rounded-md p-1 text-[12px]">
+                                <Badge class="rounded-md bg-sky-100 p-1 text-[12px] text-sky-700">
                                     {{ admin.role == 1 ? 'Admin' : 'User' }}
                                 </Badge>
                             </TableCell>
@@ -305,7 +326,7 @@ const deleteAdmin = () => {
                                         size="icon"
                                         variant="ghost"
                                         class="hover:bg-sky-100"
-                                        @click="editAdminDialog(admin.encrypted_id, admin.name, admin.email)"
+                                        @click="editAdminDialog(admin.encrypted_id, admin.name, admin.email, admin.designation)"
                                     >
                                         <Pencil class="h-4 w-4" />
                                     </Button>

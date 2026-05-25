@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ElectedOfficialsController;
 use App\Http\Controllers\Admin\FileManagerController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\ViewFileController;
+use App\Http\Controllers\Admin\ReportsController;
 
 Route::get('/storage', function () {
     Artisan::call('storage:link');
@@ -46,6 +47,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/files/subcategory/delete', [FileController::class, 'deleteSubcategory'])->name('delete.subcategory');
 
         Route::get('/view-file/{id}', [ViewFileController::class, 'index'])->name('admin.view-file');
+
+        Route::get('/reports', [ReportsController::class, 'index'])->name('admin.reports');
     });
 });
 

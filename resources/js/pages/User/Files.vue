@@ -58,9 +58,11 @@ const fetchFiles = async () => {
             provincialStatus
             title
             firstReadingDate
+            publicHearingDate
             secondReadingDate
             thirdReadingDate
             ordinanceNumber
+            finalOrdinanceNumber
             finalTitle
             enactmentDate
             lceapprovalDate
@@ -68,6 +70,7 @@ const fetchFiles = async () => {
             spslapprovalDate
             postStatus
             publishStatus
+            implementationDate
             file
             updated_at
             author {
@@ -185,7 +188,7 @@ const goToPreviousPage = () => {
                         <TableHeader class="bg-muted/40">
                             <TableRow class="[&>th]:py-4">
                                 <TableHead class="text-muted-foreground"><small>#</small></TableHead>
-                                <TableHead class="text-muted-foreground"><small>Category</small></TableHead>
+                                <TableHead class="text-muted-foreground"><small>Committee</small></TableHead>
                                 <TableHead class="text-muted-foreground"><small>No. of Files</small></TableHead>
                                 <TableHead class="text-muted-foreground"><small>Created</small></TableHead>
                             </TableRow>
@@ -201,7 +204,7 @@ const goToPreviousPage = () => {
                             <TableRow v-else-if="data?.userfiles.subCategoriesList.length === 0">
                                 <TableCell colspan="5" class="text-muted-foreground py-14 text-center">
                                     <MinusCircle class="mx-auto mb-2 h-6 w-6 text-red-500" />
-                                    No categories found
+                                    No Data Found
                                 </TableCell>
                             </TableRow>
 
@@ -233,7 +236,7 @@ const goToPreviousPage = () => {
 
                                 <TableCell>
                                     <span class="bg-muted inline-flex rounded-full px-3 py-1 text-sm">
-                                        {{ category.totalFiles }}
+                                        {{ category.totalFiles }} files
                                     </span>
                                 </TableCell>
 
@@ -299,7 +302,7 @@ const goToPreviousPage = () => {
                                             </div>
 
                                             <Badge variant="secondary" class="w-fit text-[12px]">
-                                                <span class="font-bold">{{ files.ordinanceNumber ?? '-' }}</span>
+                                                <span class="font-bold">{{ files.finalOrdinanceNumber ?? files.ordinanceNumber }}</span>
                                             </Badge>
 
                                             <p class="mt-2 line-clamp-3 text-[13px] leading-relaxed text-wrap text-slate-700">
@@ -342,7 +345,7 @@ const goToPreviousPage = () => {
                                                             : 'rounded-md bg-green-100 p-1 text-[12px] text-green-600'
                                                     "
                                                 >
-                                                    {{ files.municipalStatus == 1 ? 'Draft' : 'Approved' }}
+                                                    {{ files.municipalStatus == 1 ? 'Draft | Municipal' : 'Approved | Municipal' }}
                                                 </Badge>
 
                                                 <Badge
@@ -356,30 +359,67 @@ const goToPreviousPage = () => {
                                                 >
                                                     {{
                                                         files.provincialStatus == 1
-                                                            ? 'Disapproved'
+                                                            ? 'Disapproved | Provincial'
                                                             : files.provincialStatus == 2
-                                                              ? 'Approved'
-                                                              : 'Pending'
+                                                              ? 'Approved | Provincial'
+                                                              : 'Pending | Provincial'
                                                     }}
                                                 </Badge>
                                             </div>
 
-                                            <div class="text-muted-foreground text-[12px]">
-                                                <div>
-                                                    3rd Reading:
-                                                    {{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : 'No date' }}
-                                                </div>
+                                            <Table class="text-[12px]">
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Implementation</TableCell>
+                                                        <TableCell>{{
+                                                            files.implementationDate ? formatDate(files.implementationDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">SPSL Approval</TableCell>
+                                                        <TableCell>{{ files.spslapprovalDate ? formatDate(files.spslapprovalDate) : '-' }}</TableCell>
+                                                    </TableRow>
 
-                                                <div>
-                                                    2nd Reading:
-                                                    {{ files.secondReadingDate ? formatDate(files.secondReadingDate) : 'No date' }}
-                                                </div>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Transmittal</TableCell>
+                                                        <TableCell>{{ files.transmittalDate ? formatDate(files.transmittalDate) : '-' }}</TableCell>
+                                                    </TableRow>
 
-                                                <div>
-                                                    1st Reading:
-                                                    {{ files.firstReadingDate ? formatDate(files.firstReadingDate) : 'No date' }}
-                                                </div>
-                                            </div>
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">LCE Approval</TableCell>
+                                                        <TableCell>{{ files.lceapprovalDate ? formatDate(files.lceapprovalDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Enactment</TableCell>
+                                                        <TableCell>{{ files.enactmentDate ? formatDate(files.enactmentDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">3rd Reading</TableCell>
+                                                        <TableCell>{{ files.thirdReadingDate ? formatDate(files.thirdReadingDate) : '-' }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">2nd Reading</TableCell>
+                                                        <TableCell>{{
+                                                            files.secondReadingDate ? formatDate(files.secondReadingDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">Public Hearing</TableCell>
+                                                        <TableCell>{{
+                                                            files.publicHearingDate ? formatDate(files.publicHearingDate) : '-'
+                                                        }}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell class="font-medium">1st Reading</TableCell>
+                                                        <TableCell>{{ files.firstReadingDate ? formatDate(files.firstReadingDate) : '-' }}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
                                         </div>
                                     </TableCell>
 

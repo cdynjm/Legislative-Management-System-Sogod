@@ -47,7 +47,7 @@ const { isPending, data } = useQuery({
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="space-y-6 p-4">
             <div class="flex w-full items-center justify-between">
-                <h6 class="text-md flex-1 font-bold">Categories</h6>
+                <h6 class="text-md flex-1 font-bold">Committees</h6>
             </div>
 
             <div class="overflow-hidden rounded-md border bg-white">
@@ -56,7 +56,7 @@ const { isPending, data } = useQuery({
                         <TableRow class="text-[12px] [&>th]:py-4">
                             <TableHead class="text-muted-foreground]"> # </TableHead>
 
-                            <TableHead class="text-muted-foreground"> Category </TableHead>
+                            <TableHead class="text-muted-foreground"> Committee </TableHead>
 
                             <TableHead class="text-muted-foreground"> No. of Files </TableHead>
 
@@ -77,7 +77,7 @@ const { isPending, data } = useQuery({
                             <TableCell colspan="5" class="py-14">
                                 <div class="text-muted-foreground flex flex-col items-center gap-2">
                                     <MinusCircle class="h-8 w-8 text-red-500" />
-                                    <small>No categories found</small>
+                                    <small>No Data Found</small>
                                 </div>
                             </TableCell>
                         </TableRow>

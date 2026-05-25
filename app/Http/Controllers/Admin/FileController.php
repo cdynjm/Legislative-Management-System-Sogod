@@ -58,9 +58,11 @@ class FileController extends Controller
             'title' => $request->title,
             'authorID' => $this->aes->decrypt($request->author),
             'firstReadingDate' => $request->firstReadingDate ?? null,
+            'publicHearingDate' => $request->publicHearingDate ?? null,
             'secondReadingDate' => $request->secondReadingDate ?? null,
             'thirdReadingDate' => $request->thirdReadingDate ?? null,
             'ordinanceNumber' => $request->ordinanceNumber ?? null,
+            'finalOrdinanceNumber' => $request->finalOrdinanceNumber ?? null,
             'finalTitle' => $request->finalTitle ?? null,
             'enactmentDate' => $request->enactmentDate ?? null,
             'lceapprovalDate' => $request->lceapprovalDate ?? null,
@@ -68,6 +70,7 @@ class FileController extends Controller
             'spslapprovalDate' => $request->spslapprovalDate ?? null,
             'postStatus' => $request->postStatus == 0 ? null : $request->postStatus ,
             'publishStatus' => $request->publishStatus == 0 ? null : $request->publishStatus,
+            'implementationDate' => $request->implementationDate ?? null,
         ]);
 
         if ($request->file != null) {
