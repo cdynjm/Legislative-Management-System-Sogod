@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\FileManagerController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\ViewFileController;
 use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\BrgyOrdinancesController;
 
 Route::get('/storage', function () {
     Artisan::call('storage:link');
@@ -33,10 +34,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/elected-officials/update', [ElectedOfficialsController::class, 'updateOfficial'])->name('update.official');
         Route::delete('/elected-officials/delete', [ElectedOfficialsController::class, 'deleteOfficial'])->name('delete.official');
     
-        Route::get('/file-manager', [FileManagerController::class, 'index'])->name('admin.file-manager');
-        Route::post('/file-manager/create', [FileManagerController::class, 'createCategory'])->name('create.category');
-        Route::patch('/file-manager/update', [FileManagerController::class, 'updateCategory'])->name('update.category');
-        Route::delete('/file-manager/delete', [FileManagerController::class, 'deleteCategory'])->name('delete.category');
+        Route::get('/municipal-ordinances', [FileManagerController::class, 'index'])->name('admin.file-manager');
+        Route::post('/municipal-ordinances/create', [FileManagerController::class, 'createCategory'])->name('create.category');
+        Route::patch('/municipal-ordinances/update', [FileManagerController::class, 'updateCategory'])->name('update.category');
+        Route::delete('/municipal-ordinances/delete', [FileManagerController::class, 'deleteCategory'])->name('delete.category');
 
         Route::get('/files/{id}', [FileController::class, 'index'])->name('admin.files');
         Route::post('/files/create', [FileController::class, 'createFile'])->name('create.file');
@@ -49,6 +50,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/view-file/{id}', [ViewFileController::class, 'index'])->name('admin.view-file');
 
         Route::get('/reports', [ReportsController::class, 'index'])->name('admin.reports');
+
+        Route::get('/brgy-ordinances', [BrgyOrdinancesController::class, 'index'])->name('admin.brgy-ordinances');
+        Route::post('/brgy-ordinances/create', [BrgyOrdinancesController::class, 'createBrgy'])->name('create.brgy');
+        Route::patch('/brgy-ordinances/update', [BrgyOrdinancesController::class, 'updateBrgy'])->name('update.brgy');
+        Route::delete('/brgy-ordinances/delete', [BrgyOrdinancesController::class, 'deleteBrgy'])->name('delete.brgy');
+
     });
 });
 

@@ -15,7 +15,8 @@ const mainNavItems: NavItem[] = page.props.auth.user.role === 1
       { title: 'Dashboard', href: 'admin.dashboard', icon: LayoutGrid },
       { title: 'Admin Management', href: 'admin.management', icon: User2 },
       { title: 'Elected Officials', href: 'admin.elected-officials', icon: UserCheck },
-      { title: 'File Manager', href: 'admin.file-manager', icon: Folder },
+      { title: 'Municipal Ordinances', href: 'admin.file-manager', icon: Folder },
+      { title: 'Barangay Ordinances', href: 'admin.brgy-ordinances', icon: Folder },
       { title: 'Reports', href: 'admin.reports', icon: ActivityIcon },
     ]
   : [

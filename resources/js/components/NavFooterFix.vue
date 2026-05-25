@@ -11,12 +11,12 @@ const mainNavItems: NavItem[] = page.props.auth.user.role === 1
       { title: 'Dashboard', href: 'admin.dashboard', icon: LayoutGrid },
       { title: 'Admin', href: 'admin.management', icon: User2 },
       { title: 'Officials', href: 'admin.elected-officials', icon: UserCheck },
-      { title: 'File Manager', href: 'admin.file-manager', icon: Folder },
+      { title: 'Ordinances', href: 'admin.file-manager', icon: Folder },
     ]
   : [
       { title: 'Dashboard', href: 'user.dashboard', icon: LayoutGrid },
       { title: 'Officials', href: 'user.elected-officials', icon: UserCheck },
-      { title: 'File Manager', href: 'user.file-manager', icon: Folder },
+      { title: 'Ordinances', href: 'user.file-manager', icon: Folder },
     ];
 </script>
 

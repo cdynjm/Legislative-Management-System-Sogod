@@ -12,7 +12,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
         Route::get('/elected-officials', [ElectedOfficialsController::class, 'index'])->name('user.elected-officials');
-        Route::get('/file-manager', [FileManagerController::class, 'index'])->name('user.file-manager');
+        Route::get('/municipal-ordinances', [FileManagerController::class, 'index'])->name('user.file-manager');
         Route::get('/files/{id}', [FileController::class, 'index'])->name('user.files');
         Route::get('/view-file/{id}', [ViewFileController::class, 'index'])->name('user.view-file');
     });

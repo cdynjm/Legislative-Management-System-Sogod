@@ -20,8 +20,8 @@ const queryClient = useQueryClient();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'File Manager',
-        href: '/admin/file-manager',
+        title: 'Municipal Ordinances',
+        href: '/admin/municipal-ordinances',
     },
 ];
 

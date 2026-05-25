@@ -12,8 +12,8 @@ import { Folder, MinusCircle } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'File Manager',
-        href: '/user/file-manager',
+        title: 'Municipal Ordinances',
+        href: '/user/municipal-ordinances',
     },
 ];
 
@@ -42,7 +42,7 @@ const { isPending, data } = useQuery({
 </script>
 
 <template>
-    <Head title="File Manager" />
+    <Head title="Municipal Ordinances" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="space-y-6 p-4">
