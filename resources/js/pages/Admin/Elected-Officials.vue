@@ -1,41 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+import { ref } from 'vue';
 
-
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/./components/ui/select/';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/./components/ui/select/';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/./components/ui/table/';
+import Skeleton from '@/components/Skeleton.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
-import { Pencil, Trash2, MinusCircle, Loader2Icon, LoaderCircle } from 'lucide-vue-next';
-import { toast } from 'vue-sonner'
-import Skeleton from '@/components/Skeleton.vue';
-import NavFooterFix from '@/components/NavFooterFix.vue';
+import { LoaderCircle, MinusCircle, Pencil, Trash2 } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 
-const queryClient = useQueryClient()
+const queryClient = useQueryClient();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -59,12 +41,12 @@ const fetchOfficials = async () => {
         }
       }
     }
-  `
-    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query })
-    return response.data.data
-}
+  `;
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query });
+    return response.data.data;
+};
 
-const { isPending, error, data, isFetching } = useQuery({
+const { isPending, data } = useQuery({
     queryKey: ['fetchOfficials'],
     queryFn: fetchOfficials,
 });
@@ -82,7 +64,7 @@ const createForm = useForm({
     status: '',
     email: '',
     password: '',
-    picture: null as any
+    picture: null as any,
 });
 
 const createOfficial = () => {
@@ -120,7 +102,7 @@ const updateForm = useForm({
     status: '',
     email: '',
     password: '',
-    picture: null as any
+    picture: null as any,
 });
 
 const updateOfficial = () => {
@@ -215,114 +197,91 @@ const handleUpdatePictureChange = async (event: Event) => {
         }
     }
 };
-
 </script>
 
 <template>
-
     <Head title="Elected Officials" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="p-4 space-y-6">
-
+        <div class="space-y-6 p-4">
             <!-- Top Right Add Button -->
-            <div class="flex w-full justify-between items-center">
-
-                <h6 class="flex-1 text-md font-bold">Elected Officials</h6>
+            <div class="flex w-full items-center justify-between">
+                <h6 class="text-md flex-1 font-bold">Elected Officials</h6>
 
                 <Dialog v-model:open="openDialog">
                     <DialogTrigger as-child>
-                        <Button @click="createOfficialDialog" class="cursor-pointer">
-                            + New
-                        </Button>
+                        <Button @click="createOfficialDialog" class="cursor-pointer text-[12px]"> + New </Button>
                     </DialogTrigger>
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Add Official</DialogTitle>
-                            <DialogDescription>
-                                Enter details for a new official
-                            </DialogDescription>
+                            <DialogDescription> Enter details for a new official </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="createOfficial">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Name</Label>
-                                    <Input v-model="createForm.name" placeholder="John Doe" class="col-span-3"
-                                        required />
+                                    <Input v-model="createForm.name" placeholder="John Doe" class="col-span-3" required />
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Address</Label>
-                                    <Input v-model="createForm.address" placeholder="Address" class="col-span-3"
-                                        required />
+                                    <Input v-model="createForm.address" placeholder="Address" class="col-span-3" required />
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Position</Label>
                                     <Select v-model="createForm.position" class="col-span-3" required>
-                                        <SelectTrigger class="w-[180px]">
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select a position" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Positions</SelectLabel>
-                                                <SelectItem value="Mayor">
-                                                    Mayor
-                                                </SelectItem>
-                                                <SelectItem value="Vice Mayor">
-                                                    Vice Mayor
-                                                </SelectItem>
-                                                <SelectItem value="SB Member">
-                                                    SB Member
-                                                </SelectItem>
+                                                <SelectItem value="Mayor"> Mayor </SelectItem>
+                                                <SelectItem value="Vice Mayor"> Vice Mayor </SelectItem>
+                                                <SelectItem value="SB Member"> SB Member </SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Status</Label>
                                     <Select v-model="createForm.status" class="col-span-3" required>
-                                        <SelectTrigger class="w-[180px]">
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select a status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Status</SelectLabel>
-                                                <SelectItem value="1">
-                                                    Active
-                                                </SelectItem>
-                                                <SelectItem value="2">
-                                                    Inactive
-                                                </SelectItem>
+                                                <SelectItem value="1"> Active </SelectItem>
+                                                <SelectItem value="2"> Inactive </SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Picture</Label>
-                                    <Input type="file" class="col-span-3" @change="handlePictureChange" accept="image/*"
-                                        required />
+                                    <Input type="file" class="col-span-3" @change="handlePictureChange" accept="image/*" required />
                                 </div>
 
-
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Email</Label>
-                                    <Input v-model="createForm.email" type="email" placeholder="john@example.com"
-                                        class="col-span-3" required />
+                                    <Input v-model="createForm.email" type="email" placeholder="john@example.com" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-start">Password</Label>
-                                    <Input v-model="createForm.password" placeholder="Password" type="password"
-                                        class="col-span-3" required />
+                                    <Input v-model="createForm.password" placeholder="Password" type="password" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
                                 <Button type="submit" class="cursor-pointer" :disabled="createForm.processing">
-                                <LoaderCircle v-if="createForm.processing" class="h-4 w-4 animate-spin" />
-                                Save</Button>
+                                    <LoaderCircle v-if="createForm.processing" class="h-4 w-4 animate-spin" />
+                                    Save</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -332,90 +291,73 @@ const handleUpdatePictureChange = async (event: Event) => {
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Edit Official</DialogTitle>
-                            <DialogDescription>
-                                Update the details of the official
-                            </DialogDescription>
+                            <DialogDescription> Update the details of the official </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="updateOfficial">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-right">Name</Label>
-                                    <Input v-model="updateForm.name" placeholder="John Doe" class="col-span-3"
-                                        required />
+                                    <Input v-model="updateForm.name" placeholder="John Doe" class="col-span-3" required />
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-right">Address</Label>
-                                    <Input v-model="updateForm.address" placeholder="Address" class="col-span-3"
-                                        required />
+                                    <Input v-model="updateForm.address" placeholder="Address" class="col-span-3" required />
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-right">Position</Label>
                                     <Select v-model="updateForm.position" class="col-span-3" required>
-                                        <SelectTrigger class="w-[180px]">
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select a position" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Positions</SelectLabel>
-                                                <SelectItem value="Mayor">
-                                                    Mayor
-                                                </SelectItem>
-                                                <SelectItem value="Vice Mayor">
-                                                    Vice Mayor
-                                                </SelectItem>
-                                                <SelectItem value="SB Member">
-                                                    SB Member
-                                                </SelectItem>
+                                                <SelectItem value="Mayor"> Mayor </SelectItem>
+                                                <SelectItem value="Vice Mayor"> Vice Mayor </SelectItem>
+                                                <SelectItem value="SB Member"> SB Member </SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-right">Status</Label>
                                     <Select v-model="updateForm.status" class="col-span-3" required>
-                                        <SelectTrigger class="w-[180px]">
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select a status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Status</SelectLabel>
-                                                <SelectItem value="1">
-                                                    Active
-                                                </SelectItem>
-                                                <SelectItem value="2">
-                                                    Inactive
-                                                </SelectItem>
+                                                <SelectItem value="1"> Active </SelectItem>
+                                                <SelectItem value="2"> Inactive </SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </div>
 
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-left">Change Picture</Label>
-                                    <Input type="file" class="col-span-3" @change="handleUpdatePictureChange"
-                                        accept="image/*" />
+                                    <Input type="file" class="col-span-3" @change="handleUpdatePictureChange" accept="image/*" />
                                 </div>
 
-
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-right">Email</Label>
-                                    <Input v-model="updateForm.email" type="email" placeholder="john@example.com"
-                                        class="col-span-3" required />
+                                    <Input v-model="updateForm.email" type="email" placeholder="john@example.com" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-1">
                                     <Label class="text-start">Change Password</Label>
-                                    <Input v-model="updateForm.password" placeholder="Password" type="password"
-                                        class="col-span-3" />
+                                    <Input v-model="updateForm.password" placeholder="Password" type="password" class="col-span-3" />
                                 </div>
                             </div>
                             <DialogFooter>
                                 <Button type="submit" class="cursor-pointer" :disabled="updateForm.processing">
-                                <LoaderCircle v-if="updateForm.processing" class="h-4 w-4 animate-spin" />
-                                Save</Button>
+                                    <LoaderCircle v-if="updateForm.processing" class="h-4 w-4 animate-spin" />
+                                    Save</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -425,98 +367,167 @@ const handleUpdatePictureChange = async (event: Event) => {
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Delete Official</DialogTitle>
-                            <DialogDescription>
-                                Are you sure you want to delete this official? This action cannot be undone.
-                            </DialogDescription>
+                            <DialogDescription> Are you sure you want to delete this official? This action cannot be undone. </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="deleteOfficial">
                             <DialogFooter>
                                 <Button type="submit" class="cursor-pointer" variant="destructive" :disabled="deleteForm.processing">
-                                <LoaderCircle v-if="deleteForm.processing" class="h-4 w-4 animate-spin" />
-                                Delete</Button>
+                                    <LoaderCircle v-if="deleteForm.processing" class="h-4 w-4 animate-spin" />
+                                    Delete</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead class="w-[50px]"><small>#</small></TableHead>
-                        <TableHead class="w-[300px]"><small>Name</small></TableHead>
-                        <TableHead><small>Position</small></TableHead>
-                        <TableHead><small>Address</small></TableHead>
-                        <TableHead class="text-right"><small>Status</small></TableHead>
-                        <TableHead class="text-right"><small>Actions</small></TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow v-if="isPending">
-                        <TableCell colspan="10" class="text-center">
-                            <Skeleton />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else-if="data?.officials.length === 0">
-                        <TableCell colspan="10">
-                            <small class="text-center text-red-500 flex items-center justify-center">
-                                <MinusCircle class="mr-2 w-5" />
-                                No Data Found
-                            </small>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else v-for="(official, index) in data?.officials" :key="official.id">
-                        <TableCell>
-                            <small>{{ index + 1 }}</small>
-                        </TableCell>
-                        <TableCell class="w-[300px] pr-20">
-                            <div class="flex items-center space-x-3">
-                                <!-- Picture -->
-                                <img draggable="false" :src="'/storage/profile/' + official.photo" alt="Profile"
-                                    class="w-10 h-10 rounded-full object-cover" />
-                                <div>
-                                    <div class="font-medium">{{ official.name }}</div>
-                                    <small class="text-gray-500">{{ official.user.email }}</small>
+            <div class="overflow-hidden rounded-md border bg-white">
+                <Table>
+                    <TableHeader class="bg-muted/40">
+                        <TableRow class="[&>th]:py-4 text-[12px]">
+                            <TableHead class="text-muted-foreground">
+                                #
+                            </TableHead>
+
+                            <TableHead class="text-muted-foreground">
+                                Official
+                            </TableHead>
+
+                            <TableHead class="text-muted-foreground">
+                                Position
+                            </TableHead>
+
+                            <TableHead class="text-muted-foreground">
+                                Address
+                            </TableHead>
+
+                            <TableHead class="text-muted-foreground text-center">
+                                Status
+                            </TableHead>
+
+                            <TableHead class="text-muted-foreground text-center">
+                                Actions
+                            </TableHead>
+                        </TableRow>
+                    </TableHeader>
+
+                    <TableBody class="[&_tr:nth-child(even)]:bg-muted/20">
+                        <!-- Loading -->
+                        <TableRow v-if="isPending">
+                            <TableCell colspan="10" class="py-10">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Empty -->
+                        <TableRow v-else-if="data?.officials.length === 0">
+                            <TableCell colspan="10" class="py-14">
+                                <div class="text-muted-foreground flex flex-col items-center gap-2">
+                                    <MinusCircle class="h-8 w-8 text-red-500" />
+
+                                    <small class="text-sm"> No officials found </small>
                                 </div>
-                            </div>
-                        </TableCell>
-                        <TableCell>{{ official.position }}</TableCell>
-                        <TableCell>{{ official.address }}</TableCell>
-                        <TableCell class="text-right">
-                            <span v-if="official.status == 1" class="text-green-500">Active</span>
-                            <span v-else class="text-red-500">Inactive</span>
-                        </TableCell>
-                        <TableCell class="text-right">
-                            <Button variant="link"
-                                @click="editOfficialDialog(official.encrypted_id, official.name, official.address, official.position, official.status, official.user.email)"
-                                class="ml-2 cursor-pointer">
-                                <Pencil />
-                            </Button>
-                            <Button variant="destructive" @click="deleteOfficialDialog(official.encrypted_id)"
-                                class="ml-2 cursor-pointer">
-                                <Trash2 />
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Data -->
+                        <TableRow v-else v-for="(official, index) in data?.officials" :key="official.id" class="hover:bg-muted/30 transition">
+                            <!-- Number -->
+                            <TableCell class="text-muted-foreground font-medium">
+                                {{ Number(index) + 1 }}
+                            </TableCell>
+
+                            <!-- Profile -->
+                            <TableCell class="py-4">
+                                <div class="flex items-center gap-4">
+                                    <img
+                                        draggable="false"
+                                        :src="'/storage/profile/' + official.photo"
+                                        class="ring-muted h-12 w-12 rounded-full object-cover ring-2"
+                                    />
+
+                                    <div class="space-y-1">
+                                        <div class="text-sm font-semibold">
+                                            {{ official.name }}
+                                        </div>
+
+                                        <div class="text-muted-foreground text-xs">
+                                            {{ official.user.email }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </TableCell>
+
+                            <!-- Position -->
+                            <TableCell>
+                                <div class="inline-flex rounded-lg bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                                    {{ official.position }}
+                                </div>
+                            </TableCell>
+
+                            <!-- Address -->
+                            <TableCell class="max-w-[260px]">
+                                <p class="text-muted-foreground line-clamp-2 text-sm">
+                                    {{ official.address }}
+                                </p>
+                            </TableCell>
+
+                            <!-- Status -->
+                            <TableCell class="text-center">
+                                <span
+                                    v-if="official.status == 1"
+                                    class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700"
+                                >
+                                    ● Active
+                                </span>
+
+                                <span v-else class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                                    ● Inactive
+                                </span>
+                            </TableCell>
+
+                            <!-- Actions -->
+                            <TableCell class="text-center">
+                                <div class="flex justify-center gap-2">
+                                    <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        class="h-9 w-9"
+                                        @click="
+                                            editOfficialDialog(
+                                                official.encrypted_id,
+                                                official.name,
+                                                official.address,
+                                                official.position,
+                                                official.status,
+                                                official.user.email,
+                                            )
+                                        "
+                                    >
+                                        <Pencil class="h-4 w-4" />
+                                    </Button>
+
+                                    <Button size="icon" variant="ghost" class="h-9 w-9 text-destructive" @click="deleteOfficialDialog(official.encrypted_id)">
+                                        <Trash2 class="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </div>
-     
     </AppLayout>
 </template>
 
 <script lang="ts">
-
 type CompressOptions = {
     quality?: number;
     type?: string;
 };
 
-const compressImage = async (
-    file: File,
-    { quality = 0.3, type = 'image/jpeg' }: CompressOptions
-): Promise<File> => {
+const compressImage = async (file: File, { quality = 0.3, type = 'image/jpeg' }: CompressOptions): Promise<File> => {
     const imageBitmap = await createImageBitmap(file);
     const canvas = document.createElement('canvas');
     canvas.width = imageBitmap.width;
@@ -527,13 +538,10 @@ const compressImage = async (
 
     ctx.drawImage(imageBitmap, 0, 0);
 
-    const blob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, type, quality)
-    );
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, quality));
 
     if (!blob) throw new Error('Image compression failed: blob is null');
 
     return new File([blob], file.name, { type: blob.type });
 };
-
 </script>

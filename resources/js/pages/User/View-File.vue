@@ -1,56 +1,18 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
-
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, Link } from '@inertiajs/vue3';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Head } from '@inertiajs/vue3';
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-
-
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/./components/ui/select/';
-
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/./components/ui/table/';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import axios from 'axios';
-import { Calendar, Calendar1, Calendar1Icon, CalendarArrowDown, CheckCircle, File, FileBoxIcon, FileCheckIcon, Folder, MinusCircle, UserCircle2, Users2Icon } from 'lucide-vue-next';
-import { toast } from 'vue-sonner'
-import { Textarea } from '@/./components/ui/textarea/'
-import { CalendarCell } from 'reka-ui';
 import SkeletonBox from '@/components/SkeletonBox.vue';
+import { Button } from '@/components/ui/button';
+import { useQuery } from '@tanstack/vue-query';
+import axios from 'axios';
+import { FileBoxIcon, UserCircle2, Users2Icon } from 'lucide-vue-next';
 
 const props = defineProps<{
-    id: string
+    id: string;
 }>();
-
-const queryClient = useQueryClient();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -85,6 +47,7 @@ const fetchViewedFile = async () => {
                 coAuthors {
                     official {
                         name
+                        position
                     }
                 }
                 category {
@@ -105,186 +68,175 @@ const fetchViewedFile = async () => {
     return response.data.data;
 };
 
-const { data, isPending, isFetching, isLoading } = useQuery({
+const { data, isFetching } = useQuery({
     queryKey: ['userfetchViewedFile'],
     queryFn: fetchViewedFile,
 });
-
 </script>
 
 <template>
-
     <Head title="View File" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="p-4 space-y-6">
-
+        <div class="space-y-6 p-4">
             <Card class="w-full shadow-none outline-none" v-if="isFetching">
                 <CardHeader>
                     <SkeletonBox />
                 </CardHeader>
             </Card>
 
-            <Card v-else class="w-full shadow-none outline-none">
-                <CardHeader>
-                    <CardTitle><span class="text-[13px] mr-2">Ordinance Number: </span>{{
-                        data?.userviewFile.file.ordinanceNumber != null ? data?.userviewFile.file.ordinanceNumber : '--' }}
-                    </CardTitle>
-                    <CardDescription class="mt-2">{{ data?.userviewFile.file.title }}</CardDescription>
-                    <CardDescription class="font-bold text-blue-500">{{ data?.userviewFile.file.category.category }}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <hr>
-                    <div class="mt-6">
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div v-if="data?.userviewFile.file.municipalStatus == 1">
-                                <MinusCircle class="w-5 h-5 text-red-500" />
+            <Card class="bg-background w-full border shadow-none" v-else>
+                <CardHeader class="bg-muted/20 space-y-4 border-b">
+                    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <!-- MAIN INFO -->
+                        <div class="space-y-2">
+                            <CardTitle class="text-xl font-bold tracking-tight">
+                                Ordinance #{{ data?.userviewFile.file.ordinanceNumber ?? '' }}
+                            </CardTitle>
+
+                            <CardDescription class="text-sm leading-relaxed">
+                                {{ data?.userviewFile.file.title }}
+                            </CardDescription>
+
+                            <div class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
+                                {{ data?.userviewFile.file.category.category }}
                             </div>
-                            <div v-else>
-                                <CheckCircle class="w-5 h-5 text-green-500" />
-                            </div>
-                            Municipal Status: <span
-                                :class="data?.userviewFile.file.municipalStatus == 1 ? 'text-red-500' : 'text-green-500'">{{
-                                    data?.userviewFile.file.municipalStatus == 1 ? 'Draft Ordinance' : 'Approved Ordinance'
-                                }}</span>
                         </div>
 
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <!-- Municipal Status Icon -->
+                        <!-- STATUS BADGES -->
+                        <div class="flex flex-col gap-2 md:items-end">
                             <div
-                                v-if="data?.userviewFile.file.provincialStatus == null || data?.userviewFile.file.provincialStatus == 1">
-                                <MinusCircle class="w-5 h-5 text-red-500" />
+                                class="rounded-full px-3 py-1 text-xs font-medium"
+                                :class="data?.userviewFile.file.municipalStatus == 1 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-700'"
+                            >
+                                Municipal: {{ data?.userviewFile.file.municipalStatus == 1 ? 'Draft' : 'Approved' }}
                             </div>
-                            <div v-else>
-                                <CheckCircle class="w-5 h-5 text-green-500" />
-                            </div>
-                            Provincial Status: 
-                            <span :class="[
-                                data?.userviewFile.file.provincialStatus == 1 ? 'text-red-500' :
-                                    data?.userviewFile.file.provincialStatus == 2 ? 'text-green-500' :
-                                        'text-gray-500'
-                            ]">
+
+                            <div
+                                class="rounded-full px-3 py-1 text-xs font-medium"
+                                :class="data?.userviewFile.file.provincialStatus == 2 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'"
+                            >
+                                Provincial:
                                 {{
-                                    data?.userviewFile.file.provincialStatus == 1
-                                        ? 'Disapproved'
-                                        : data?.userviewFile.file.provincialStatus == 2
-                                ? 'Approved Ordinance'
-                                : 'No Status Yet'
+                                    data?.userviewFile.file.provincialStatus == 2
+                                        ? 'Approved'
+                                        : data?.userviewFile.file.provincialStatus == 1
+                                          ? 'Disapproved'
+                                          : 'No Status'
                                 }}
+                            </div>
+                        </div>
+                    </div>
+                </CardHeader>
+
+                <CardContent class="space-y-6 p-6">
+                    <!-- AUTHOR SECTION -->
+                    <div class="bg-muted/20 space-y-3 rounded-lg border p-4">
+                        <div class="flex items-center gap-2 text-sm font-medium">
+                            <UserCircle2 class="h-5 w-5 text-blue-500" />
+                            Author Information
+                        </div>
+
+                        <div class="text-muted-foreground text-sm">
+                            <span class="text-foreground font-medium">
+                                {{ data?.userviewFile.file.author.name }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- CO AUTHORS -->
+                    <div class="space-y-3 rounded-lg border p-4">
+                        <div class="flex items-center gap-2 text-sm font-medium">
+                            <Users2Icon class="h-5 w-5 text-blue-500" />
+                            Co-Authors
+                        </div>
+
+                        <div class="space-y-2">
+                            <div v-if="!data?.userviewFile.file.coAuthors?.length" class="text-muted-foreground text-sm italic">No co-authors</div>
+
+                            <div
+                                v-for="(coauthor, index) in data?.userviewFile.file.coAuthors"
+                                :key="index"
+                                class="bg-muted/30 flex items-center justify-between rounded-md px-3 py-2 text-sm"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 rounded-full bg-sky-500" />
+                                    <span class="font-medium">{{ coauthor.official.name }}</span>
+                                </div>
+                                <span class="text-muted-foreground text-xs">
+                                    {{ coauthor.official.position }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FINAL TITLE -->
+                    <div class="space-y-2 rounded-lg border p-4">
+                        <div class="flex items-center gap-2 text-sm font-medium">
+                            <FileBoxIcon class="h-4 w-4 text-green-500" />
+                            Final Title
+                        </div>
+
+                        <p class="text-muted-foreground text-sm leading-relaxed">
+                            {{ data?.userviewFile.file.finalTitle ?? '-' }}
+                        </p>
+                    </div>
+
+                    <!-- DATES -->
+                    <div class="space-y-3 rounded-lg border p-4">
+                        <div class="text-sm font-medium">Timeline</div>
+
+                        <div class="grid grid-cols-1 gap-2 text-sm md:grid-cols-2">
+                            <div
+                                v-for="(label, key) in {
+                                    '1st Reading': 'firstReadingDate',
+                                    '2nd Reading': 'secondReadingDate',
+                                    '3rd Reading': 'thirdReadingDate',
+                                    Enactment: 'enactmentDate',
+                                    'LCE Approval': 'lceapprovalDate',
+                                    Transmittal: 'transmittalDate',
+                                    'SPSL Approval': 'spslapprovalDate',
+                                }"
+                                :key="key"
+                                class="bg-muted/20 flex justify-between rounded-md px-3 py-2"
+                            >
+                                <span class="text-muted-foreground">{{ key }}</span>
+                                <span class="font-medium">
+                                    {{ data?.userviewFile.file[label] ? formatDate(data?.userviewFile.file[label]) : '-' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FLAGS -->
+                    <div class="flex flex-wrap gap-3 text-sm">
+                        <div class="bg-muted rounded-md px-3 py-1">
+                            Post:
+                            <span class="font-medium">
+                                {{ data?.userviewFile.file.postStatus == 1 ? 'Posted' : 'Not Posted' }}
                             </span>
                         </div>
 
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <UserCircle2 class="w-5 h-5 text-blue-500" />
-                            </div>
-                            Author: <span class="font-bold">{{ data?.userviewFile.file.author.name }}</span>
+                        <div class="bg-muted rounded-md px-3 py-1">
+                            Publish:
+                            <span class="font-medium">
+                                {{ data?.userviewFile.file.publishStatus == 1 ? 'Published' : 'Not Published' }}
+                            </span>
                         </div>
-
-                        <div class="mb-6">
-                            <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                                <div>
-                                    <Users2Icon class="w-5 h-5 text-blue-500" />
-                                </div>
-                                Co-Authors: <span>{{ data?.userviewFile.file.coAuthors == '' ? 'None' : '' }}</span>
-                            </div>
-                            <div v-for="(coauthor, index) in data?.userviewFile.file.coAuthors" class="text-[13px] text-gray-500 ml-10">
-                                <div class="flex items-center gap-2 mb-1">
-                                <UserCircle2 class="w-4 h-4" />
-                                {{ coauthor.official.name }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-3 mt-6">
-                            <div>
-                                <FileBoxIcon class="w-5 h-5 text-green-500" />
-                            </div>
-                            Final Title:
-                        </div>
-
-                        <div class="text-gray-500 text-[13px]">{{ data?.userviewFile.file.finalTitle != null ? data?.userviewFile.file.finalTitle : '-' }}</div>
-                        <hr class="my-4">
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            1st Reading: <span>{{ data?.userviewFile.file.firstReadingDate != null ? formatDate(data?.userviewFile.file.firstReadingDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            2nd Reading: <span>{{ data?.userviewFile.file.secondReadingDate != null ? formatDate(data?.userviewFile.file.secondReadingDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            3rd Reading: <span>{{ data?.userviewFile.file.thirdReadingDate != null ? formatDate(data?.userviewFile.file.thirdReadingDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            Enactment: <span>{{ data?.userviewFile.file.enactmentDate != null ? formatDate(data?.userviewFile.file.enactmentDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            LCE Approval: <span>{{ data?.userviewFile.file.lceapprovalDate != null ? formatDate(data?.userviewFile.file.lceapprovalDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            Transmittal: <span>{{ data?.userviewFile.file.transmittalDate != null ? formatDate(data?.userviewFile.file.transmittalDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <Calendar1Icon class="w-5 h-5 text-green-500" />
-                            </div>
-                            SPSL Approval: <span>{{ data?.userviewFile.file.spslapprovalDate != null ? formatDate(data?.userviewFile.file.spslapprovalDate) : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <FileCheckIcon class="w-5 h-5 text-green-500" />
-                            </div>
-                            Post Status: <span>{{ data?.userviewFile.file.postStatus == 1 ? 'Posted' : '-' }}</span>
-                        </div>
-
-                        <div class="text-gray-500 text-[13px] flex items-center gap-2 mb-2">
-                            <div>
-                                <FileCheckIcon class="w-5 h-5 text-green-500" />
-                            </div>
-                            Publish Status: <span>{{ data?.userviewFile.file.publishStatus == 1 ? 'Published' : '-' }}</span>
-                        </div>
-
                     </div>
                 </CardContent>
-                <CardFooter class="flex justify-between px-6 pb-6">
-                    <Button class="text-[12px]">
-                        <a :href="`/storage/files/${data?.userviewFile.file.file}`" target="_blank">Open PDF File</a>
+
+                <CardFooter class="bg-muted/10 flex justify-end border-t p-4">
+                    <Button size="sm" class="text-xs">
+                        <a :href="`/storage/files/${data?.userviewFile.file.file}`" target="_blank"> Open File </a>
                     </Button>
                 </CardFooter>
             </Card>
-
         </div>
     </AppLayout>
 </template>
 
 <script lang="ts">
-
 function formatDate(dateInput: string | Date): string {
     const date = new Date(dateInput);
 
@@ -296,10 +248,4 @@ function formatDate(dateInput: string | Date): string {
 
     return `${datePart}`;
 }
-
-function trimTitle(title: string, limit: number = 50): string {
-    if (title.length <= limit) return title;
-    return title.slice(0, limit).trim() + '...';
-}
-
 </script>

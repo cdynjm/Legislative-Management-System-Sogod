@@ -1,41 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, Link, router } from '@inertiajs/vue3';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-
-
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/./components/ui/select/';
+import { Head } from '@inertiajs/vue3';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/./components/ui/table/';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import axios from 'axios';
-import { Pencil, Trash2, MinusCircle, Loader2Icon, Folder, LoaderCircle } from 'lucide-vue-next';
-import { toast } from 'vue-sonner'
 import Skeleton from '@/components/Skeleton.vue';
 import SlowLink from '@/components/SlowLink.vue';
-
-const queryClient = useQueryClient()
+import { useQuery } from '@tanstack/vue-query';
+import axios from 'axios';
+import { Folder, MinusCircle } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -57,86 +30,109 @@ const fetchCategories = async () => {
         }
       }
     }
-  `
-    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query })
-    return response.data.data
-}
+  `;
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query });
+    return response.data.data;
+};
 
-const { isPending, error, data, isFetching } = useQuery({
+const { isPending, data } = useQuery({
     queryKey: ['userfetchCategories'],
     queryFn: fetchCategories,
 });
-
-function navigateTo(name: string, params: Record<string, any> = {}) {
-    router.get(route(name, params));
-}
-
 </script>
 
 <template>
-
     <Head title="File Manager" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="p-4 space-y-6">
-
-            <div class="flex w-full justify-between items-center">
-                <h6 class="flex-1 text-md font-bold">Categories</h6>
+        <div class="space-y-6 p-4">
+            <div class="flex w-full items-center justify-between">
+                <h6 class="text-md flex-1 font-bold">Categories</h6>
             </div>
-            
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead class="w-[50px]"><small>#</small></TableHead>
-                        <TableHead class="w-[300px]"><small>Category</small></TableHead>
-                        <TableHead><small>No. of Files</small></TableHead>
-                        <TableHead><small>Creation Date</small></TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow v-if="isPending">
-                        <TableCell colspan="10" class="text-center">
-                            <Skeleton />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else-if="data?.usercategories.categoriesList.length === 0">
-                        <TableCell colspan="5">
-                            <small class="text-center text-red-500 flex items-center justify-center">
-                                <MinusCircle class="mr-2 w-5" />
-                                No Data Found
-                            </small>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else v-for="(category, index) in data?.usercategories.categoriesList"
-                        :key="category.id">
-                        <TableCell>
-                            <small>{{ index + 1 }}</small>
-                        </TableCell>
-                        <TableCell class="w-[300px] pr-20">
-                            <SlowLink :href="route('user.files', { id: category.encrypted_id })">
-                                <div class="flex items-center space-x-3">
-                                    <div>
-                                        <Folder class="h-8 w-8 flex-shrink-0 rounded-full border p-1 text-blue-500"
-                                            fill="currentColor" />
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">{{ category.category }}</div>
-                                    </div>
-                                </div>
-                            </SlowLink>
-                        </TableCell>
-                        <TableCell>{{ category.totalFiles }}</TableCell>
-                        <TableCell><small>{{ formatDateTime(category.created_at) }}</small></TableCell>
-                    </TableRow>
 
-                </TableBody>
-            </Table>
+            <div class="overflow-hidden rounded-md border bg-white">
+                <Table>
+                    <TableHeader class="bg-muted/40">
+                        <TableRow class="text-[12px] [&>th]:py-4">
+                            <TableHead class="text-muted-foreground]"> # </TableHead>
+
+                            <TableHead class="text-muted-foreground"> Category </TableHead>
+
+                            <TableHead class="text-muted-foreground"> No. of Files </TableHead>
+
+                            <TableHead class="text-muted-foreground"> Created </TableHead>
+                        </TableRow>
+                    </TableHeader>
+
+                    <TableBody class="[&_tr:nth-child(even)]:bg-muted/20">
+                        <!-- Loading -->
+                        <TableRow v-if="isPending">
+                            <TableCell colspan="10" class="py-10 text-center">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Empty -->
+                        <TableRow v-else-if="data?.usercategories.categoriesList.length === 0">
+                            <TableCell colspan="5" class="py-14">
+                                <div class="text-muted-foreground flex flex-col items-center gap-2">
+                                    <MinusCircle class="h-8 w-8 text-red-500" />
+                                    <small>No categories found</small>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Data -->
+                        <TableRow
+                            v-else
+                            v-for="(category, index) in data?.usercategories.categoriesList"
+                            :key="category.id"
+                            class="hover:bg-muted/30 transition"
+                        >
+                            <!-- Index -->
+                            <TableCell class="text-muted-foreground font-medium">
+                                {{ Number(index) + 1 }}
+                            </TableCell>
+
+                            <!-- Category -->
+                            <TableCell class="w-[320px]">
+                                <SlowLink :href="route('user.files', { id: category.encrypted_id })" prefetch class="group">
+                                    <div class="group-hover:bg-muted/40 flex items-center gap-3 rounded-lg p-2 transition">
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+                                            <Folder class="h-6 w-6 text-blue-500" />
+                                        </div>
+
+                                        <div class="space-y-1">
+                                            <div class="text-sm font-semibold transition group-hover:text-blue-600">
+                                                {{ category.category }}
+                                            </div>
+
+                                            <div class="text-muted-foreground text-xs">Click to view files</div>
+                                        </div>
+                                    </div>
+                                </SlowLink>
+                            </TableCell>
+
+                            <!-- Files count -->
+                            <TableCell>
+                                <span class="bg-muted inline-flex items-center rounded-full px-3 py-1 text-sm font-medium">
+                                    {{ category.totalFiles }} files
+                                </span>
+                            </TableCell>
+
+                            <!-- Date -->
+                            <TableCell class="text-muted-foreground text-[12px]">
+                                {{ formatDateTime(category.created_at) }}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     </AppLayout>
 </template>
 
 <script lang="ts">
-
 function formatDateTime(dateInput: string | Date): string {
     const date = new Date(dateInput);
 
@@ -154,5 +150,4 @@ function formatDateTime(dateInput: string | Date): string {
 
     return `${datePart} | ${timePart}`;
 }
-
 </script>

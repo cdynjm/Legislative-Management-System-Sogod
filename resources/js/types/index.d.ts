@@ -27,14 +27,14 @@ export interface SharedData extends PageProps {
 }
 
 export interface User {
-    // id: number;
+    id: number;
     name: string;
     email: string;
-  //  avatar?: string;
-   // email_verified_at: string | null;
-    role: number,
-   // created_at: string;
-   // updated_at: string;
+    avatar?: string;
+    email_verified_at: string | null;
+    role: number;
+    created_at: string;
+    updated_at: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

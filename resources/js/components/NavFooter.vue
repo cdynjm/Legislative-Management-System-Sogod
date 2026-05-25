@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Folder } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';
 import { MessageCircle, Globe2Icon } from 'lucide-vue-next';
 </script>

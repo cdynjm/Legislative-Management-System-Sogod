@@ -1,43 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, Link, router } from '@inertiajs/vue3';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-
-
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/./components/ui/select/';
+import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/./components/ui/table/';
+import Skeleton from '@/components/Skeleton.vue';
+import SlowLink from '@/components/SlowLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
-import { Pencil, Trash2, MinusCircle, Loader2Icon, Folder, LoaderCircle } from 'lucide-vue-next';
-import { toast } from 'vue-sonner'
-import Skeleton from '@/components/Skeleton.vue';
-import NavFooter from '@/components/NavFooter.vue';
-import NavFooterFix from '@/components/NavFooterFix.vue';
-import SlowLink from '@/components/SlowLink.vue';
+import { Folder, LoaderCircle, MinusCircle, Pencil, Trash2 } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 
-const queryClient = useQueryClient()
+const queryClient = useQueryClient();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -59,12 +38,12 @@ const fetchCategories = async () => {
         }
       }
     }
-  `
-    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query })
-    return response.data.data
-}
+  `;
+    const response = await axios.post(import.meta.env.VITE_APP_GRAPHQL_ENDPOINT, { query });
+    return response.data.data;
+};
 
-const { isPending, error, data, isFetching } = useQuery({
+const { isPending, data } = useQuery({
     queryKey: ['fetchCategories'],
     queryFn: fetchCategories,
 });
@@ -147,52 +126,39 @@ const deleteCategory = () => {
         },
     });
 };
-
-function navigateTo(name: string, params: Record<string, any> = {}) {
-  router.get(route(name, params));
-}
-
 </script>
 
 <template>
-
     <Head title="File Manager" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="p-4 space-y-6">
-
+        <div class="space-y-6 p-4">
             <!-- Top Right Add Button -->
-            <div class="flex w-full justify-between items-center">
-
-                <h6 class="flex-1 text-md font-bold">Categories</h6>
+            <div class="flex w-full items-center justify-between">
+                <h6 class="text-md flex-1 font-bold">Categories</h6>
 
                 <Dialog v-model:open="openDialog">
                     <DialogTrigger as-child>
-                        <Button @click="createCategoryDialog" class="cursor-pointer">
-                            + New
-                        </Button>
+                        <Button @click="createCategoryDialog" class="cursor-pointer text-[12px]"> + New </Button>
                     </DialogTrigger>
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Add Category</DialogTitle>
-                            <DialogDescription>
-                                Create a new category for the files
-                            </DialogDescription>
+                            <DialogDescription> Create a new category for the files </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="createCategory">
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">Category</Label>
-                                    <Input v-model="createForm.category" placeholder="Category Name" class="col-span-3"
-                                        required />
+                                    <Input v-model="createForm.category" placeholder="Category Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
-                                <Button type="submit" class="cursor-pointer"
-                                    :disabled="createForm.processing">
-                                <LoaderCircle v-if="createForm.processing" class="h-4 w-4 animate-spin" />
-                                    Save</Button>
+                                <Button type="submit" class="cursor-pointer" :disabled="createForm.processing">
+                                    <LoaderCircle v-if="createForm.processing" class="h-4 w-4 animate-spin" />
+                                    Save</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -202,24 +168,21 @@ function navigateTo(name: string, params: Record<string, any> = {}) {
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Edit Category</DialogTitle>
-                            <DialogDescription>
-                                Edit the details of the selected category
-                            </DialogDescription>
+                            <DialogDescription> Edit the details of the selected category </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="updateCategory">
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">Category</Label>
-                                    <Input v-model="updateForm.category" placeholder="Category Name" class="col-span-3"
-                                        required />
+                                    <Input v-model="updateForm.category" placeholder="Category Name" class="col-span-3" required />
                                 </div>
                             </div>
                             <DialogFooter>
-                                <Button type="submit" class="cursor-pointer"
-                                    :disabled="updateForm.processing">
+                                <Button type="submit" class="cursor-pointer" :disabled="updateForm.processing">
                                     <LoaderCircle v-if="updateForm.processing" class="h-4 w-4 animate-spin" />
-                                    Save</Button>
+                                    Save</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -229,88 +192,124 @@ function navigateTo(name: string, params: Record<string, any> = {}) {
                     <DialogContent class="sm:max-w-[600px]">
                         <DialogHeader>
                             <DialogTitle>Delete Category</DialogTitle>
-                            <DialogDescription>
-                                Are you sure you want to delete this category? This action cannot be undone.
-                            </DialogDescription>
+                            <DialogDescription> Are you sure you want to delete this category? This action cannot be undone. </DialogDescription>
                         </DialogHeader>
 
                         <form action="" @submit.prevent="deleteCategory">
                             <DialogFooter>
-                                <Button type="submit" class="cursor-pointer" variant="destructive"
-                                    :disabled="deleteForm.processing">
+                                <Button type="submit" class="cursor-pointer" variant="destructive" :disabled="deleteForm.processing">
                                     <LoaderCircle v-if="deleteForm.processing" class="h-4 w-4 animate-spin" />
-                                    Delete</Button>
+                                    Delete</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead class="w-[50px]"><small>#</small></TableHead>
-                        <TableHead class="w-[300px]"><small>Category</small></TableHead>
-                        <TableHead><small>No. of Files</small></TableHead>
-                        <TableHead><small>Creation Date</small></TableHead>
-                        <TableHead class="text-right"><small>Actions</small></TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow v-if="isPending">
-                        <TableCell colspan="10" class="text-center">
-                            <Skeleton />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else-if="data?.categories.categoriesList.length === 0">
-                        <TableCell colspan="5">
-                            <small class="text-center text-red-500 flex items-center justify-center">
-                                <MinusCircle class="mr-2 w-5" />
-                                No Data Found
-                            </small>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow v-else v-for="(category, index) in data?.categories.categoriesList" :key="category.id">
-                        <TableCell>
-                            <small>{{ index + 1 }}</small>
-                        </TableCell>
-                        <TableCell class="w-[300px] pr-20">
-                            <SlowLink :href="route('admin.files', { id: category.encrypted_id })" prefetch>
-                                <div class="flex items-center space-x-3">
-                                    <div>
-                                        <Folder class="h-8 w-8 flex-shrink-0 rounded-full border p-1 text-blue-500"
-                                            fill="currentColor" />
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">{{ category.category }}</div>
-                                    </div>
+            <div class="overflow-hidden rounded-md border bg-white">
+                <Table>
+                    <TableHeader class="bg-muted/40">
+                        <TableRow class="text-[12px] [&>th]:py-4">
+                            <TableHead class="text-muted-foreground]"> # </TableHead>
+
+                            <TableHead class="text-muted-foreground"> Category </TableHead>
+
+                            <TableHead class="text-muted-foreground"> No. of Files </TableHead>
+
+                            <TableHead class="text-muted-foreground"> Created </TableHead>
+
+                            <TableHead class="text-muted-foreground text-center"> Actions </TableHead>
+                        </TableRow>
+                    </TableHeader>
+
+                    <TableBody class="[&_tr:nth-child(even)]:bg-muted/20">
+                        <!-- Loading -->
+                        <TableRow v-if="isPending">
+                            <TableCell colspan="10" class="py-10 text-center">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Empty -->
+                        <TableRow v-else-if="data?.categories.categoriesList.length === 0">
+                            <TableCell colspan="5" class="py-14">
+                                <div class="text-muted-foreground flex flex-col items-center gap-2">
+                                    <MinusCircle class="h-8 w-8 text-red-500" />
+                                    <small>No categories found</small>
                                 </div>
-                            </SlowLink>
-                        </TableCell>
-                        <TableCell>{{ category.totalFiles }}</TableCell>
-                        <TableCell><small>{{ formatDateTime(category.created_at) }}</small></TableCell>
+                            </TableCell>
+                        </TableRow>
 
-                        <TableCell class="text-right">
-                            <Button variant="link" @click="editCategoryDialog(category.encrypted_id, category.category)"
-                                class="ml-2 cursor-pointer">
-                                <Pencil />
-                            </Button>
-                            <Button variant="destructive" @click="deleteCategoryDialog(category.encrypted_id)"
-                                class="ml-2 cursor-pointer">
-                                <Trash2 />
-                            </Button>
-                        </TableCell>
-                    </TableRow>
+                        <!-- Data -->
+                        <TableRow
+                            v-else
+                            v-for="(category, index) in data?.categories.categoriesList"
+                            :key="category.id"
+                            class="hover:bg-muted/30 transition"
+                        >
+                            <!-- Index -->
+                            <TableCell class="text-muted-foreground font-medium">
+                                {{ Number(index) + 1 }}
+                            </TableCell>
 
-                </TableBody>
-            </Table>
+                            <!-- Category -->
+                            <TableCell class="w-[320px]">
+                                <SlowLink :href="route('admin.files', { id: category.encrypted_id })" prefetch class="group">
+                                    <div class="group-hover:bg-muted/40 flex items-center gap-3 rounded-lg p-2 transition">
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+                                            <Folder class="h-6 w-6 text-blue-500" />
+                                        </div>
+
+                                        <div class="space-y-1">
+                                            <div class="text-sm font-semibold transition group-hover:text-blue-600">
+                                                {{ category.category }}
+                                            </div>
+
+                                            <div class="text-muted-foreground text-xs">Click to view files</div>
+                                        </div>
+                                    </div>
+                                </SlowLink>
+                            </TableCell>
+
+                            <!-- Files count -->
+                            <TableCell>
+                                <span class="bg-muted inline-flex items-center rounded-full px-3 py-1 text-sm font-medium">
+                                    {{ category.totalFiles }} files
+                                </span>
+                            </TableCell>
+
+                            <!-- Date -->
+                            <TableCell class="text-muted-foreground text-[12px]">
+                                {{ formatDateTime(category.created_at) }}
+                            </TableCell>
+
+                            <!-- Actions -->
+                            <TableCell class="text-center">
+                                <div class="flex justify-center gap-2">
+                                    <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        class="h-9 w-9"
+                                        @click="editCategoryDialog(category.encrypted_id, category.category)"
+                                    >
+                                        <Pencil class="h-4 w-4" />
+                                    </Button>
+
+                                    <Button size="icon" variant="ghost" class="h-9 w-9 text-destructive" @click="deleteCategoryDialog(category.encrypted_id)">
+                                        <Trash2 class="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </div>
-       
     </AppLayout>
 </template>
 
 <script lang="ts">
-
 function formatDateTime(dateInput: string | Date): string {
     const date = new Date(dateInput);
 
@@ -328,5 +327,4 @@ function formatDateTime(dateInput: string | Date): string {
 
     return `${datePart} | ${timePart}`;
 }
-
 </script>

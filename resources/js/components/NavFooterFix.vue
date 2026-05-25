@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePage, Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { type NavItem, type SharedData } from '@/types';
 import { LayoutGrid, Folder, UserCheck, User2 } from 'lucide-vue-next';
 import SlowLink from './SlowLink.vue';

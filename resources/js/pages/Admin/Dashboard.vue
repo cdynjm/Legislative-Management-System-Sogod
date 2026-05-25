@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import { useQuery } from '@tanstack/vue-query';
 import axios from 'axios';
-import { CheckCircle, File, Folder, MinusCircle, UserCheck, Users } from 'lucide-vue-next';
+import { EyeIcon, File, Folder, UserCheck, Users } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,8 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/admin/dashboard',
     },
 ];
-
-const queryClient = useQueryClient();
 
 const fetchDashboard = async () => {
     const query = `
@@ -62,14 +60,13 @@ const fetchDashboard = async () => {
     return response.data.data;
 };
 
-const { isPending, data, error, isFetching } = useQuery({
+const { isPending, data } = useQuery({
     queryKey: ['fetchDashboard'],
     queryFn: fetchDashboard,
 });
 </script>
 
 <template>
-
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
@@ -138,8 +135,7 @@ const { isPending, data, error, isFetching } = useQuery({
         <div class="grid grid-cols-1 gap-4 p-4 py-0">
             <Card class="py-2 shadow-none">
                 <div class="mx-5">
-                    <CardDescription
-                        class="items-center justify-center gap-2 text-center font-bold md:flex md:justify-between">
+                    <CardDescription class="items-center justify-center gap-2 text-center font-bold md:flex md:justify-between">
                         <div class="flex items-center justify-center gap-2 md:mb-0">
                             <Folder class="mb-[2px] h-auto w-5" />
                             Recent Ordinances
@@ -150,141 +146,167 @@ const { isPending, data, error, isFetching } = useQuery({
             </Card>
         </div>
 
-        <div class="rounded-md p-4">
+        <div class="bg-background m-4 overflow-hidden rounded-md border">
             <Table>
-                <TableHeader class="bg-gray-50">
-                    <TableRow>
-                        <TableHead><small>#</small></TableHead>
-                        <TableHead><small>Author & Title</small></TableHead>
-                        <TableHead><small>Category</small></TableHead>
-                        <TableHead><small>Co-Authors</small></TableHead>
-                        <TableHead><small>Status</small></TableHead>
-                        <TableHead><small>Updated</small></TableHead>
-                        <TableHead class="text-center"><small>File</small></TableHead>
+                <TableHeader class="sticky top-0 z-10 bg-slate-50">
+                    <TableRow class="text-[12px] [&>th]:py-4">
+                        <TableHead class="text-center"> # </TableHead>
+
+                        <TableHead class=""> Ordinance </TableHead>
+
+                        <TableHead> Category </TableHead>
+
+                        <TableHead> Co-Authors </TableHead>
+
+                        <TableHead> Status </TableHead>
+
+                        <TableHead> Updated </TableHead>
+
+                        <TableHead class="text-center"> File </TableHead>
                     </TableRow>
                 </TableHeader>
 
-                <TableBody>
+                <TableBody class="[&>tr:nth-child(even)]:bg-muted/20 [&>tr:hover]:bg-sky-50/40">
                     <TableRow v-if="isPending">
-                        <TableCell :colspan="10">
+                        <TableCell :colspan="7">
                             <SkeletonCard />
                         </TableCell>
                     </TableRow>
 
                     <TableRow v-else-if="data?.dashboard.files.length === 0">
-                        <TableCell :colspan="10" class="py-16 text-center text-gray-500"> No data found. </TableCell>
+                        <TableCell :colspan="7" class="py-20 text-center"> No data found </TableCell>
                     </TableRow>
 
                     <template v-else>
-                        <TableRow v-for="(files, index) in data?.dashboard.files" :key="index">
-                            <TableCell>{{ +index + 1 }}</TableCell>
+                        <TableRow v-for="(files, index) in data.dashboard.files" :key="index" class="align-top">
+                            <!-- Index -->
+                            <TableCell class="text-muted-foreground text-center font-medium">
+                                {{ Number(index) + 1 }}
+                            </TableCell>
 
-                            <TableCell class="max-w-[200px] text-[13px]">
-                                <div class="flex flex-col gap-4">
-                                    <div class="flex items-center gap-2">
-                                        <img draggable="false" :src="'/storage/profile/' + files.author.photo"
-                                            class="h-8 w-8 shrink-0 rounded-full object-cover" />
+                            <!-- Author + Title -->
+                            <TableCell class="max-w-[300px]">
+                                <div class="space-y-4">
+                                    <div class="flex items-center gap-3">
+                                        <img
+                                            draggable="false"
+                                            :src="'/storage/profile/' + files.author.photo"
+                                            class="h-10 w-10 rounded-full object-cover ring-2 ring-sky-100"
+                                        />
+
                                         <div>
-                                            <p class="text-[13px] font-medium">{{ files.author.name }}</p>
-                                            <p class="text-[11px] text-gray-500">{{ files.author.position }}</p>
+                                            <p class="text-[13px] font-medium">
+                                                {{ files.author.name }}
+                                            </p>
+
+                                            <p class="text-muted-foreground text-xs">
+                                                {{ files.author.position }}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <small class="uppercase">Ordinance No. :</small>
-                                        <b>{{ files.ordinanceNumber ?? '-' }}</b>
-                                    </div>
 
-                                    <p class="text-wrap">
+                                    <Badge variant="secondary" class="w-fit text-[12px]">
+                                        <span class="font-bold">{{ files.ordinanceNumber ?? '-' }}</span>
+                                    </Badge>
+
+                                    <p class="mt-2 line-clamp-3 text-[13px] leading-relaxed text-wrap text-slate-700">
                                         {{ files.finalTitle ?? files.title }}
                                     </p>
                                 </div>
                             </TableCell>
 
-                            <TableCell class="text-[13px] font-bold text-wrap text-gray-600">
-                                {{ files.category.category }}
+                            <!-- Category -->
+                            <TableCell>
+                                <Badge variant="outline" class="text-[12px] uppercase">
+                                    {{ files.category.category }}
+                                </Badge>
                             </TableCell>
 
-                            <TableCell>
-                                <div class="flex flex-col gap-2 text-wrap">
-                                    <div v-for="(coauthor, i) in files.coAuthors" :key="i"
-                                        class="flex items-center gap-2">
-                                        <span class="h-2 w-2 shrink-0 rounded-full bg-sky-500" />
-                                        <div>
-                                            <p class="text-[12px] font-medium">{{ coauthor.official.name }}</p>
-                                            <p class="text-[11px] text-gray-500">{{ coauthor.official.position }}</p>
+                            <!-- Co Authors -->
+                            <TableCell class="w-[220px]">
+                                <div class="bg-muted/20 max-h-32 overflow-y-auto rounded-lg p-3">
+                                    <template v-if="files.coAuthors.length">
+                                        <div v-for="(coauthor, i) in files.coAuthors" :key="i" class="mb-3 flex gap-3 last:mb-0">
+                                            <div class="mt-1 h-2 w-2 rounded-full bg-sky-500" />
+
+                                            <div>
+                                                <p class="text-xs font-medium">
+                                                    {{ coauthor.official.name }}
+                                                </p>
+
+                                                <p class="text-muted-foreground text-[11px]">
+                                                    {{ coauthor.official.position }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
+
+                                    <div v-else class="text-muted-foreground flex h-16 items-center justify-start text-xs">No co-authors</div>
                                 </div>
                             </TableCell>
 
+                            <!-- Status -->
                             <TableCell>
-                                <div class="flex flex-col gap-4">
-                                    <div class="flex items-center gap-2">
-                                        <small>Municipal: </small>
-                                        <div class="flex items-center gap-1 text-[12px]">
-                                            <MinusCircle v-if="files.municipalStatus == 1"
-                                                class="h-4 w-4 shrink-0 text-red-500" />
-                                            <CheckCircle v-else class="h-4 w-4 shrink-0 text-green-500" />
-                                            <span
-                                                :class="files.municipalStatus == 1 ? 'text-red-500' : 'text-green-500'">
-                                                {{ files.municipalStatus == 1 ? 'Draft' : 'Approved' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <template v-if="files.thirdReadingDate">
-                                            <small class="uppercase">3rd Reading:</small>
-                                            <p>{{ formatDate(files.thirdReadingDate) }}</p>
-                                        </template>
-                                        <template v-else-if="files.secondReadingDate">
-                                            <small class="uppercase">2nd Reading:</small>
-                                            <p>{{ formatDate(files.secondReadingDate) }}</p>
-                                        </template>
-                                        <template v-else-if="files.firstReadingDate">
-                                            <small class="uppercase">1st Reading:</small>
-                                            <p>{{ formatDate(files.firstReadingDate) }}</p>
-                                        </template>
-                                        <template v-else>
-                                            <small class="text-gray-400 uppercase">No reading yet</small>
-                                        </template>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <small>Provincial: </small>
-                                        <div class="flex items-center gap-1 text-[12px]">
-                                            <MinusCircle
-                                                v-if="files.provincialStatus == null || files.provincialStatus == 1"
-                                                class="h-4 w-4 shrink-0 text-red-500" />
-                                            <CheckCircle v-else class="h-4 w-4 shrink-0 text-green-500" />
-                                            <span :class="[
+                                <div class="space-y-3">
+                                    <div class="flex flex-col gap-2">
+                                        <Badge
+                                            :class="
+                                                files.municipalStatus == 1
+                                                    ? 'rounded-md bg-red-100 p-1 text-[12px] text-red-600'
+                                                    : 'rounded-md bg-green-100 p-1 text-[12px] text-green-600'
+                                            "
+                                        >
+                                            {{ files.municipalStatus == 1 ? 'Draft' : 'Approved' }}
+                                        </Badge>
+
+                                        <Badge
+                                            :class="
                                                 files.provincialStatus == 1
-                                                    ? 'text-red-500'
+                                                    ? 'rounded-md bg-red-100 p-1 text-[12px] text-red-600'
                                                     : files.provincialStatus == 2
-                                                        ? 'text-green-500'
-                                                        : 'text-gray-500',
-                                            ]">
-                                                {{
-                                                    files.provincialStatus == 1
-                                                        ? 'Disapproved'
-                                                        : files.provincialStatus == 2
-                                                            ? 'Approved'
-                                                            : 'No Status'
-                                                }}
-                                            </span>
-                                        </div>
+                                                      ? 'rounded-md bg-green-100 p-1 text-[12px] text-green-600'
+                                                      : 'rounded-md bg-gray-100 p-1 text-[12px] text-gray-600'
+                                            "
+                                        >
+                                            {{ files.provincialStatus == 1 ? 'Disapproved' : files.provincialStatus == 2 ? 'Approved' : 'Pending' }}
+                                        </Badge>
+                                    </div>
+
+                                    <div class="text-muted-foreground text-[11px]">
+                                        <template v-if="files.thirdReadingDate">
+                                            3rd Reading:
+                                            {{ formatDate(files.thirdReadingDate) }}
+                                        </template>
+
+                                        <template v-else-if="files.secondReadingDate">
+                                            2nd Reading:
+                                            {{ formatDate(files.secondReadingDate) }}
+                                        </template>
+
+                                        <template v-else-if="files.firstReadingDate">
+                                            1st Reading:
+                                            {{ formatDate(files.firstReadingDate) }}
+                                        </template>
+
+                                        <template v-else> No reading yet </template>
                                     </div>
                                 </div>
                             </TableCell>
 
-                            <TableCell class="text-[12px] text-gray-500">
-                                {{ formatDateTime(files.updated_at) }}
+                            <!-- Updated -->
+                            <TableCell>
+                                <div class="text-muted-foreground text-xs">
+                                    {{ formatDateTime(files.updated_at) }}
+                                </div>
                             </TableCell>
 
+                            <!-- File -->
                             <TableCell class="text-center">
-                                <a :href="'/storage/files/' + files.file" target="_blank" rel="noopener noreferrer">
-                                    <Button size="sm" variant="link" class="text-[12px]">
-                                        <File class="mr-1 h-4 w-4" /> PDF
-                                    </Button>
-                                </a>
+                                <Button variant="default" size="sm" class="gap-2 text-[12px]" as-child>
+                                    <a :href="'/storage/files/' + files.file" target="_blank">
+                                        <EyeIcon class="h-4 w-4" />
+                                    </a>
+                                </Button>
                             </TableCell>
                         </TableRow>
                     </template>

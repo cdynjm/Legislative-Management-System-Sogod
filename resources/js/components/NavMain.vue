@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem, type SharedData } from '@/types';
-import { usePage, router, Link } from '@inertiajs/vue3';
+import { type NavItem } from '@/types';
 import SlowLink from './SlowLink.vue';
 
 defineProps<{
   items: NavItem[];
 }>();
 
-const page = usePage<SharedData>();
-
-function navigateTo(routeName: string) {
-  router.get(route(routeName));
-}
 </script>
 
 <template>

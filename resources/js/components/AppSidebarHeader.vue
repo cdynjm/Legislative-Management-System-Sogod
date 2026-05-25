@@ -3,11 +3,10 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import UserInfo from '@/components/UserInfo.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItemType } from '@/types';
-import { LucideUserCircle, User2Icon, UserCircle2Icon, UserCircleIcon, UserIcon, LogOut } from 'lucide-vue-next'
+import { LucideUserCircle, User2Icon, LogOut } from 'lucide-vue-next'
 
 import { usePage, Link, router } from '@inertiajs/vue3';
 import { type SharedData, type User } from '@/types';
-import { getInitials } from '@/composables/useInitials';
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,12 +15,9 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import SlowLink from '@/components/SlowLink.vue';

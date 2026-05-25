@@ -1,4 +1,5 @@
 import { RouteParams, Router } from 'ziggy-js';
+import type { Config } from 'ziggy-js';
 
 declare global {
     function route(): Router;
@@ -8,5 +9,13 @@ declare global {
 declare module '@vue/runtime-core' {
     interface ComponentCustomProperties {
         route: typeof route;
+    }
+}
+
+declare module '@inertiajs/core' {
+    interface PageProps {
+        ziggy: Config & {
+            location: string;
+        };
     }
 }

@@ -1,17 +1,11 @@
 <!-- components/PaginationControls.vue -->
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'; // or your preferred icons
 import { Button } from '@/components/ui/button';
 
 const props = defineProps<{
   currentPage: number;
   lastPage: number;
-}>();
-
-const emit = defineEmits<{
-  (e: 'previous'): void;
-  (e: 'next'): void;
 }>();
 </script>
 
