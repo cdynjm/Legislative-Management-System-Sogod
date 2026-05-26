@@ -74,9 +74,12 @@ type CoAuthor {
 type BrgyFiles {
   id: ID!
   encrypted_id: String!
+  title: String
   barangayID: String
   dateReceived: String
   status: String
+  file: String
+  appropriation: String
   barangay: Barangay @hasOne
 }
 
@@ -135,6 +138,16 @@ type BrgyOrdinances {
   brgyordinancesList: [Barangay]
 }
 
+type ViewBrgy {
+  brgyName: Barangay!
+  filesListPaginated: BrgyFilePagination!
+}
+
+type BrgyFilePagination {
+  data: [BrgyFiles!]!
+  paginatorInfo: PaginatorInfo!
+}
+
 #GUEST QUERY - WELCOME PAGE
 extend type Query {
   welcome(page: Int, first: Int!, search: String): Welcome
@@ -163,6 +176,9 @@ type Query @guard {
 
   brgyordinances: BrgyOrdinances
     @field(resolver: "App\\GraphQL\\Queries\\Admin\\BrgyOrdinances")
+
+  brgyfiles(id: String!, page: Int, first: Int!, search: String): ViewBrgy
+    @field(resolver: "App\\GraphQL\\Queries\\Admin\\BrgyFile")
 }
 
 #USER QUERY - PAGES

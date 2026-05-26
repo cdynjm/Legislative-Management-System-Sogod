@@ -16,9 +16,12 @@ class BrgyFiles extends Model
 
     protected $fillable = [
         'id',
+        'title',
         'barangayID',
         'dateReceived',
-        'status'
+        'status',
+        'file',
+        'appropriation'
     ];
 
     public function barangay()

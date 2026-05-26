@@ -269,7 +269,10 @@ const goToPreviousPage = () => {
                             </TableRow>
 
                             <TableRow v-else-if="fileSearchData.length === 0">
-                                <TableCell :colspan="7" class="py-20 text-center"> No data found </TableCell>
+                                 <TableCell colspan="5" class="text-muted-foreground py-14 text-center">
+                                    <MinusCircle class="mx-auto mb-2 h-6 w-6 text-red-500" />
+                                    No Data Found
+                                </TableCell>
                             </TableRow>
 
                             <template v-else>

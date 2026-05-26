@@ -315,7 +315,7 @@ const handleEditFileChange = async (event: Event) => {
         input.value = ''; // Clear input
         toast.error('File too large. Please select a smaller file.');
     }
-    createForm.file = file;
+    updateForm.file = file;
     console.log('Selected file:', file);
 };
 
@@ -959,7 +959,10 @@ const deleteCategory = () => {
                             </TableRow>
 
                             <TableRow v-else-if="fileSearchData.length === 0">
-                                <TableCell :colspan="7" class="py-20 text-center"> No data found </TableCell>
+                                 <TableCell colspan="5" class="text-muted-foreground py-14 text-center">
+                                    <MinusCircle class="mx-auto mb-2 h-6 w-6 text-red-500" />
+                                    No Data Found
+                                </TableCell>
                             </TableRow>
 
                             <template v-else>

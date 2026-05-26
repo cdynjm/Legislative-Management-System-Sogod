@@ -77,7 +77,7 @@ class FileController extends Controller
 
             $files = Files::where('id', $this->aes->decrypt($request->id))->first();
 
-            if($file->file != null) {
+            if($files->file != null) {
                 File::delete(public_path('storage/files/'.$files->file));
             }
 
@@ -92,13 +92,15 @@ class FileController extends Controller
             ]);
         }
 
-        CoAuthor::where('fileID', $this->aes->decrypt($request->id))->delete();
-        foreach ($request->coauthor as $coAuthor) {
-            CoAuthor::create([
-                'fileID' => $this->aes->decrypt($request->id),
-                'officialID' => $this->aes->decrypt($coAuthor),
-                'categoryID' => $request->categoryID,
-            ]);
+        if($request->coauthor != null) {
+            CoAuthor::where('fileID', $this->aes->decrypt($request->id))->delete();
+            foreach ($request->coauthor as $coAuthor) {
+                CoAuthor::create([
+                    'fileID' => $this->aes->decrypt($request->id),
+                    'officialID' => $this->aes->decrypt($coAuthor),
+                    'categoryID' => $request->categoryID,
+                ]);
+            }
         }
     }
 

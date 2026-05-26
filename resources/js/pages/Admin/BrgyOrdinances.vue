@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/./components/ui/table';
 import Skeleton from '@/components/Skeleton.vue';
+import SlowLink from '@/components/SlowLink.vue';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -136,7 +137,7 @@ const deleteBrgy = () => {
 
                         <form action="" @submit.prevent="createBrgy">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Brgy Name</Label>
                                     <Input v-model="createForm.brgyname" placeholder="Barangay Name" class="col-span-3" required />
                                 </div>
@@ -160,7 +161,7 @@ const deleteBrgy = () => {
 
                         <form action="" @submit.prevent="updateBrgy">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Brgy Name</Label>
                                     <Input v-model="updateForm.brgyname" placeholder="Barangay Name" class="col-span-3" required />
                                 </div>
@@ -219,7 +220,6 @@ const deleteBrgy = () => {
                             <TableCell colspan="5" class="py-16">
                                 <div class="text-muted-foreground flex flex-col items-center gap-3">
                                     <MinusCircle class="h-10 w-10 text-red-400" />
-
                                     <p class="text-sm">No barangays found</p>
                                 </div>
                             </TableCell>
@@ -236,17 +236,19 @@ const deleteBrgy = () => {
 
                             <!-- User -->
                             <TableCell>
-                                <div class="flex items-center gap-3">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100">
-                                        <MapPin class="h-6 w-6 text-sky-600" />
-                                    </div>
+                                <SlowLink :href="route('admin.view-brgy', { id: brgy.encrypted_id })" prefetch class="group">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100">
+                                            <MapPin class="h-6 w-6 text-sky-600" />
+                                        </div>
 
-                                    <div>
-                                        <p class="text-sm font-medium">
-                                            {{ brgy.brgyname }}
-                                        </p>
+                                        <div>
+                                            <p class="text-sm font-medium">
+                                                {{ brgy.brgyname }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </SlowLink>
                             </TableCell>
 
                             <!-- Actions -->

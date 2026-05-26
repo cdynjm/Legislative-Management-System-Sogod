@@ -153,19 +153,19 @@ const deleteAdmin = () => {
 
                         <form action="" @submit.prevent="createAdmin">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Name</Label>
                                     <Input v-model="createForm.name" placeholder="John Doe" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Designation</Label>
                                     <Input v-model="createForm.designation" placeholder="Designation" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Email</Label>
                                     <Input v-model="createForm.email" type="email" placeholder="john@example.com" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-start">Password</Label>
                                     <Input v-model="createForm.password" placeholder="Password" type="password" class="col-span-3" required />
                                 </div>
@@ -189,19 +189,19 @@ const deleteAdmin = () => {
 
                         <form action="" @submit.prevent="updateAdmin">
                             <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Name</Label>
                                     <Input v-model="updateForm.name" placeholder="John Doe" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Designation</Label>
                                     <Input v-model="updateForm.designation" placeholder="Designation" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-right">Email</Label>
                                     <Input v-model="updateForm.email" type="email" placeholder="john@example.com" class="col-span-3" required />
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
+                                <div class="grid grid-cols-1 items-center gap-2">
                                     <Label class="text-start">Change Password</Label>
                                     <Input v-model="updateForm.password" placeholder="Password" type="password" class="col-span-3" />
                                 </div>

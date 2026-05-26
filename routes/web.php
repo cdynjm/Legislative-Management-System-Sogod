@@ -55,6 +55,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/brgy-ordinances/create', [BrgyOrdinancesController::class, 'createBrgy'])->name('create.brgy');
         Route::patch('/brgy-ordinances/update', [BrgyOrdinancesController::class, 'updateBrgy'])->name('update.brgy');
         Route::delete('/brgy-ordinances/delete', [BrgyOrdinancesController::class, 'deleteBrgy'])->name('delete.brgy');
+        
+        Route::get('/brgy-ordinances/{id}', [BrgyOrdinancesController::class, 'viewBrgy'])->name('admin.view-brgy');
+        Route::post('/brgy-ordinances/create-file', [BrgyOrdinancesController::class, 'createFile'])->name('create.brgy-file');
+        Route::post('/brgy-ordinances/update-file', [BrgyOrdinancesController::class, 'updateFile'])->name('update.brgy-file');
+        Route::delete('/brgy-ordinances/delete-file', [BrgyOrdinancesController::class, 'deleteFile'])->name('delete.brgy-file');
 
     });
 });
