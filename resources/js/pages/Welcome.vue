@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/co
 import { Input } from '@/components/ui/input';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import axios from 'axios';
-import { EyeIcon, Folder, LoaderCircle, MinusCircle, PenIcon, Search, UserIcon } from 'lucide-vue-next';
+import { Building2, EyeIcon, Folder, LoaderCircle, MapPin, MinusCircle, PenIcon, Search, UserIcon } from 'lucide-vue-next';
 
 const queryClient = useQueryClient();
 
@@ -69,7 +69,7 @@ const guestFetchFiles = async () => {
         query,
         variables: {
             page: currentPage.value,
-            first: 10,
+            first: 30,
             search: searchQuery.value,
         },
     });
@@ -111,6 +111,8 @@ const goToPreviousPage = () => {
         currentPage.value--;
     }
 };
+
+const activeTab = ref<'municipal' | 'barangay'>('municipal');
 </script>
 
 <template>
@@ -123,7 +125,7 @@ const goToPreviousPage = () => {
             <nav class="flex w-full items-center justify-between gap-4">
                 <!-- Logo + Labels -->
                 <div class="flex items-center gap-3">
-                    <img draggable="false" src="/app-logo.gif" alt="Logo" class="h-10 w-auto" />
+                    <img draggable="false" src="/app-logo.gif" alt="Logo" class="h-13 w-auto rounded-full shadow-xl" />
 
                     <!-- Labels -->
                     <div class="flex flex-col leading-tight">
@@ -133,7 +135,7 @@ const goToPreviousPage = () => {
                             <span class="text-sm text-[12px] text-gray-500 dark:text-gray-400"> Legislative Management System </span>
                         </div>
                         <!-- LMS only for smaller than sm -->
-                        <span class="block text-base font-semibold text-[#1b1b18] sm:hidden dark:text-white"> LMS </span>
+                        <span class="block text-base font-semibold text-[#1b1b18] sm:hidden dark:text-white"> Sogod LMS </span>
                     </div>
                 </div>
 
@@ -150,8 +152,70 @@ const goToPreviousPage = () => {
             </nav>
         </header>
 
-        <div class="flex min-h-screen w-full flex-col">
-            <main class="w-full flex-1 lg:px-20 lg:pt-10">
+        <div class="w-full lg:px-20 lg:pt-5">
+            <div class="mb-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                <!-- Municipal -->
+                <Card
+                    @click="activeTab = 'municipal'"
+                    class="group relative cursor-pointer overflow-hidden border transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                    :class="activeTab === 'municipal' ? 'border-blue-500 bg-blue-50/50 shadow-sm' : 'bg-white'"
+                >
+                    <!-- active indicator bar -->
+                    <div v-if="activeTab === 'municipal'" class="absolute top-0 left-0 h-full w-1 bg-blue-500" />
+
+                    <CardContent class="flex items-center gap-4 p-5 py-2">
+                        <!-- icon -->
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg"
+                            :class="activeTab === 'municipal' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'"
+                        >
+                            <Building2 class="h-5 w-5" />
+                        </div>
+
+                        <!-- text -->
+                        <div class="flex-1">
+                            <div class="text-sm font-semibold text-gray-800">Municipal Ordinances</div>
+                            <div class="text-muted-foreground text-xs">Active legislative records</div>
+                        </div>
+
+                        <!-- status dot -->
+                        <div class="h-2.5 w-2.5 rounded-full" :class="activeTab === 'municipal' ? 'bg-blue-500' : 'bg-gray-300'" />
+                    </CardContent>
+                </Card>
+
+                <!-- Barangay -->
+                <Card
+                    @click="activeTab = 'barangay'"
+                    class="group relative cursor-pointer overflow-hidden border transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                    :class="activeTab === 'barangay' ? 'border-green-500 bg-green-50/50 shadow-sm' : 'bg-white'"
+                >
+                    <!-- active indicator bar -->
+                    <div v-if="activeTab === 'barangay'" class="absolute top-0 left-0 h-full w-1 bg-green-500" />
+
+                    <CardContent class="flex items-center gap-4 p-5 py-2">
+                        <!-- icon -->
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg"
+                            :class="activeTab === 'barangay' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'"
+                        >
+                            <MapPin class="h-5 w-5" />
+                        </div>
+
+                        <!-- text -->
+                        <div class="flex-1">
+                            <div class="text-sm font-semibold text-gray-800">Barangay Ordinances</div>
+                            <div class="text-muted-foreground text-xs">List of Barangay Ordinances</div>
+                        </div>
+
+                        <!-- status dot -->
+                        <div class="h-2.5 w-2.5 rounded-full" :class="activeTab === 'barangay' ? 'bg-green-500' : 'bg-gray-300'" />
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+
+        <div class="flex min-h-screen w-full flex-col" v-if="activeTab === 'municipal'">
+            <main class="w-full flex-1 lg:px-20">
                 <Card class="mb-4 py-2 shadow-none">
                     <div class="mx-5">
                         <CardDescription class="items-center justify-center gap-2 text-center font-bold md:flex md:justify-between">
@@ -191,7 +255,7 @@ const goToPreviousPage = () => {
 
                     <Card
                         v-else
-                        class="group bg-background flex h-full flex-col overflow-hidden border transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                        class="group bg-background flex h-full flex-col overflow-hidden border py-0 shadow-lg transition-all duration-300 hover:-translate-y-1"
                         v-for="(files, index) in fileSearchData"
                         :key="index"
                     >
@@ -235,7 +299,7 @@ const goToPreviousPage = () => {
                             </div>
                         </div>
 
-                        <CardContent class="flex-1 space-y-5 p-5">
+                        <CardContent class="flex-1 space-y-4 p-5 pb-0">
                             <!-- Title -->
                             <div>
                                 <p class="line-clamp-3 text-[13px] leading-relaxed text-slate-700">
@@ -251,9 +315,9 @@ const goToPreviousPage = () => {
                                     <span class="text-sm font-semibold text-blue-600"> Co-Authors </span>
                                 </div>
 
-                                <div class="bg-muted/30 max-h-32 overflow-y-auto items-center rounded-lg p-3">
+                                <div class="bg-muted/30 max-h-32 items-center overflow-y-auto rounded-lg p-3">
                                     <template v-if="files.coAuthors?.length">
-                                        <div v-for="(coauthor, index) in files.coAuthors" :key="index" class="flex items-center gap-3 mb-2 last:mb-0">
+                                        <div v-for="(coauthor, index) in files.coAuthors" :key="index" class="mb-2 flex items-center gap-3 last:mb-0">
                                             <UserIcon class="h-5 w-5 text-blue-600" />
 
                                             <div>
@@ -307,7 +371,7 @@ const goToPreviousPage = () => {
                         </CardContent>
 
                         <!-- Footer -->
-                        <CardFooter class="bg-muted/20 mt-auto flex items-center justify-between border-t p-5">
+                        <CardFooter class="bg-muted/40 mt-auto flex items-center justify-between border-t px-5 pb-5">
                             <small class="text-muted-foreground text-xs text-wrap">
                                 {{ formatDateTime(files.updated_at) }}
                             </small>
@@ -326,6 +390,30 @@ const goToPreviousPage = () => {
                     @next="goToNextPage"
                     @previous="goToPreviousPage"
                 />
+            </main>
+            <NavFooter />
+        </div>
+
+        <div class="flex min-h-screen w-full flex-col" v-if="activeTab === 'barangay'">
+            <main class="w-full flex-1 lg:px-20">
+                <Card class="mb-4 py-2 shadow-none">
+                    <div class="mx-5">
+                        <CardDescription class="items-center justify-center gap-2 text-center font-bold md:flex md:justify-between">
+                            <div class="flex items-center justify-center gap-2 md:mb-0">
+                                <Folder class="mb-[2px] h-auto w-5" />
+                                List of Barangay Ordinances
+                            </div>
+                            <div class="hidden md:flex">Municipality of Sogod</div>
+                        </CardDescription>
+                    </div>
+                </Card>
+                <div class="my-4 flex w-full items-center gap-2 sm:w-auto">
+                    <Input v-model="searchQuery" placeholder="Search..." class="w-full bg-white text-sm shadow-none sm:w-full" />
+                    <Button @click="searchQuerybtn" :disabled="isSearching" class="flex items-center gap-1 text-sm">
+                        <LoaderCircle v-if="isSearching" class="h-4 w-4 animate-spin" />
+                        <Search v-else />
+                    </Button>
+                </div>
             </main>
             <NavFooter />
         </div>

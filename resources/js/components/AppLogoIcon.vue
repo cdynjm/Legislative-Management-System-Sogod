@@ -13,5 +13,5 @@ defineProps<Props>();
 </script>
 
 <template>
-    <img src="/app-logo.gif" class="rounded-lg" alt="" />
+    <img src="/app-logo.gif" class="rounded-full" alt="" />
 </template>

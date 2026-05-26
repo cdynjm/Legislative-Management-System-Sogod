@@ -30,7 +30,7 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase title="Log in to your account" description="Enter account credentials to log in">
+    <AuthBase title="Hello, Welcome" description="Enter account credentials to log in">
 
         <Head title="Log in" />
 

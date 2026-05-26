@@ -28,13 +28,13 @@ const mainNavItems: NavItem[] = page.props.auth.user.role === 1
 </script>
 
 <template>
-    <Sidebar collapsible="icon" variant="inset">
+    <Sidebar collapsible="icon" variant="floating">
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
                         <SlowLink :href="page.props.auth.user.role == 1 ? route('admin.dashboard') : route('user.dashboard')">
-                        <AppLogo />
+                        <AppLogo  />
                         </SlowLink>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
